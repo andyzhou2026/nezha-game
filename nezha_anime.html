@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哪吒·天命逆转 — 动漫企划</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+
+  :root {
+    --red: #e8002d;
+    --orange: #ff6a00;
+    --yellow: #ffd700;
+    --dark: #0a0a0f;
+    --dark2: #12121a;
+    --blue: #0066ff;
+    --cyan: #00e5ff;
+    --purple: #7c3aed;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: #fff;
+    font-family: 'Noto Serif SC', 'SimSun', serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== 粒子背景 canvas ===== */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== HERO 首屏 ===== */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, rgba(232,0,45,0.25) 0%, transparent 70%),
+                radial-gradient(ellipse at 20% 80%, rgba(255,106,0,0.15) 0%, transparent 50%);
+  }
+
+  /* 大字背景装饰 */
+  .hero-bg-text {
+    position: absolute;
+    font-size: 28vw;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    user-select: none;
+    letter-spacing: -0.05em;
+    animation: bgPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes bgPulse {
+    0%,100% { opacity: 0.03; transform: scale(1); }
+    50% { opacity: 0.06; transform: scale(1.02); }
+  }
+
+  /* 火焰环 */
+  .fire-ring {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,106,0,0.3);
+    animation: ringRotate 8s linear infinite;
+  }
+  .fire-ring::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,0,45,0.2);
+  }
+  .fire-ring::after {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255,215,0,0.15);
+  }
+
+  @keyframes ringRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-logo {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    letter-spacing: 0.8em;
+    color: rgba(255,215,0,0.8);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1s ease 0.3s both;
+  }
+
+  .hero-title {
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, #ffd700 40%, #ff6a00 70%, #e8002d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    animation: fadeInDown 1s ease 0.5s both;
+    position: relative;
+  }
+
+  .hero-title::after {
+    content: '哪吒';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #fff 0%, #ffd700 40%, #ff6a00 70%, #e8002d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(20px);
+    opacity: 0.5;
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%,100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  .hero-en {
+    font-size: clamp(1rem, 3vw, 2rem);
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.5rem;
+    animation: fadeInDown 1s ease 0.7s both;
+  }
+
+  .hero-tagline {
+    margin-top: 2rem;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: rgba(255,215,0,0.9);
+    letter-spacing: 0.2em;
+    animation: fadeInDown 1s ease 0.9s both;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    animation: fadeInDown 1s ease 1.1s both;
+  }
+
+  .btn {
+    padding: 0.8rem 2.5rem;
+    border: none;
+    border-radius: 2px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #e8002d, #ff6a00);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(232,0,45,0.4);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(232,0,45,0.7);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: #ffd700;
+    border: 1px solid rgba(255,215,0,0.5);
+  }
+
+  .btn-outline:hover {
+    background: rgba(255,215,0,0.1);
+    border-color: #ffd700;
+    transform: translateY(-2px);
+  }
+
+  /* 向下滚动提示 */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s ease-in-out infinite;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.6));
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== 通用 section ===== */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.5em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    margin-bottom: 3rem;
+  }
+
+  /* ===== 世界观 ===== */
+  .world-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .world-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 2rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .world-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-color, linear-gradient(90deg, #e8002d, #ff6a00));
+  }
+
+  .world-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,215,0,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .world-card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .world-card h3 {
+    font-size: 1.3rem;
+    color: #ffd700;
+    margin-bottom: 0.8rem;
+  }
+
+  .world-card p {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  /* ===== 角色区 ===== */
+  .characters {
+    background: linear-gradient(180deg, transparent, rgba(232,0,45,0.05), transparent);
+    padding: 6rem 2rem;
+  }
+
+  .chars-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .char-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .char-card {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+
+  .char-card:hover .char-avatar {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px var(--char-glow, rgba(232,0,45,0.5));
+  }
+
+  .char-avatar {
+    width: 160px;
+    height: 200px;
+    margin: 0 auto 1.2rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .char-avatar-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+  }
+
+  .char-avatar-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--char-dark, #0a0a0f) 0%, transparent 50%);
+  }
+
+  .char-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .char-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--char-color, #ffd700);
+    margin-bottom: 0.8rem;
+  }
+
+  .char-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.05em;
+  }
+
+  .char-desc {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+  }
+
+  /* ===== 故事大纲 ===== */
+  .story-timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .story-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--red), var(--orange), var(--yellow), transparent);
+  }
+
+  .story-ep {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.6s ease;
+  }
+
+  .story-ep.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .story-ep::before {
+    content: '';
+    position: absolute;
+    left: -2.4rem;
+    top: 0.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--ep-color, #e8002d);
+    box-shadow: 0 0 15px var(--ep-color, #e8002d);
+  }
+
+  .ep-num {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--ep-color, #e8002d);
+    margin-bottom: 0.3rem;
+  }
+
+  .ep-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.6rem;
+  }
+
+  .ep-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    max-width: 700px;
+  }
+
+  /* ===== 技能系统 ===== */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .skill-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .skill-item:hover {
+    background: rgba(232,0,45,0.08);
+    border-color: rgba(232,0,45,0.3);
+    transform: translateY(-3px);
+  }
+
+  .skill-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+  .skill-name { font-size: 1rem; color: #ffd700; margin-bottom: 0.4rem; }
+  .skill-desc { font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* ===== 火焰动画 canvas ===== */
+  #flameCanvas {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+
+  footer span {
+    color: var(--orange);
+  }
+
+  /* ===== 动画 ===== */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== 滚动进入动画 ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== 导航 ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,15,0.9), transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .nav-logo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffd700, #ff6a00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: #ffd700; }
+
+  /* 分隔线装饰 */
+  .sep {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,106,0,0.3), transparent);
+    margin: 0;
+  }
+
+  /* 引用块 */
+  .quote-block {
+    border-left: 3px solid var(--red);
+    padding: 1.5rem 2rem;
+    margin: 3rem 0;
+    background: rgba(232,0,45,0.05);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .quote-block p {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+  }
+
+  .quote-block cite {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: rgba(255,215,0,0.6);
+    letter-spacing: 0.2em;
+  }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .fire-ring { width: 300px; height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 粒子背景 -->
+<canvas id="particles"></canvas>
+
+<!-- 底部火焰 -->
+<canvas id="flameCanvas"></canvas>
+
+<!-- 导航 -->
+<nav>
+  <div class="nav-logo">哪吒·天命逆转</div>
+  <ul class="nav-links">
+    <li><a href="index.html">主页</a></li>
+    <li><a href="#world">世界观</a></li>
+    <li><a href="#characters">角色</a></li>
+    <li><a href="#story">故事</a></li>
+    <li><a href="#skills">技能</a></li>
+    <li><a href="nezha_game.html" style="color:#ff6a00;font-weight:700;">▶ 玩游戏</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-text">哪吒</div>
+  <div class="fire-ring"></div>
+
+  <div class="hero-logo">
+    <p class="hero-subtitle">2026 · 原创动漫企划</p>
+    <h1 class="hero-title">哪吒</h1>
+    <p class="hero-en">NEZHA · FATE REVERSED</p>
+    <p class="hero-tagline">「我命由我不由天」</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="document.getElementById('world').scrollIntoView({behavior:'smooth'})">探索世界</button>
+      <button class="btn btn-outline" onclick="document.getElementById('characters').scrollIntoView({behavior:'smooth'})">认识角色</button>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>向下滚动</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- 世界观 -->
+<section id="world">
+  <p class="section-label fade-in">World Setting</p>
+  <h2 class="section-title fade-in">混沌纪元 · 世界观</h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="quote-block fade-in">
+    <p>在天地初分的洪荒之后，三界秩序由天庭掌控，命运之轮由生死簿裁定。<br>
+    但有一个孩子，从出生那一刻起，就注定要打破这一切。</p>
+    <cite>— 《哪吒·天命逆转》序章</cite>
+  </div>
+
+  <div class="world-grid">
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #e8002d, #ff6a00)">
+      <span class="world-card-icon">☁️</span>
+      <h3>三界格局</h3>
+      <p>天庭、人间、海底龙宫各据一方。天庭以命运簿掌控众生，龙族以法则束缚海域，人间在两股力量的夹缝中求存。</p>
+    </div>
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #0066ff, #00e5ff)">
+      <span class="world-card-icon">📜</span>
+      <h3>天命之书</h3>
+      <p>每个生命诞生时，命运便已刻入天书。哪吒被判定为"魔丸转世"，命定在十六岁引发天劫，毁灭陈塘关。但他拒绝接受这一判定。</p>
+    </div>
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #7c3aed, #ec4899)">
+      <span class="world-card-icon">🔥</span>
+      <h3>法力体系</h3>
+      <p>法力分为「天力」「妖力」「龙力」三系。哪吒身含魔丸之力，属于混沌能量，不受三界法则约束，也因此被视为危险存在。</p>
+    </div>
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #059669, #10b981)">
+      <span class="world-card-icon">⚖️</span>
+      <h3>天庭律法</h3>
+      <p>天庭以"维护秩序"为名，以命运簿剥夺众生自主。凡胆敢违逆天命者，将被天雷击杀，魂魄散灭，永世不得转生。</p>
+    </div>
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #d97706, #fbbf24)">
+      <span class="world-card-icon">🌊</span>
+      <h3>龙族传说</h3>
+      <p>四海龙王曾是三界霸主，后被天庭压制，镇于海底。龙族少年敖丙背负族群复兴的重担，与哪吒亦敌亦友，命运交错。</p>
+    </div>
+    <div class="world-card fade-in" style="--card-color: linear-gradient(90deg, #dc2626, #f87171)">
+      <span class="world-card-icon">🏯</span>
+      <h3>陈塘关</h3>
+      <p>故事发生地，凡人聚居之所。百姓在天庭护佑和妖魔侵扰的双重压力下生存，对哪吒的出生充满恐惧与偏见。</p>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- 角色 -->
+<div class="characters" id="characters">
+  <div class="chars-inner">
+    <p class="section-label fade-in">Characters</p>
+    <h2 class="section-title fade-in">核心角色</h2>
+    <div class="section-divider fade-in"></div>
+
+    <div class="char-list">
+
+      <!-- 哪吒 -->
+      <div class="char-card fade-in" style="--char-glow: rgba(232,0,45,0.6); --char-color: #ff4757;">
+        <div class="char-avatar">
+          <div class="char-avatar-bg" style="background: linear-gradient(135deg, #1a0005, #3d0010); --char-dark: #1a0005;">
+            <svg width="90" height="120" viewBox="0 0 90 120" style="position:relative;z-index:1">
+              <!-- 哪吒简化卡通形象 -->
+              <!-- 身体 -->
+              <rect x="30" y="55" width="30" height="40" rx="5" fill="#e8002d" opacity="0.9"/>
+              <!-- 头 -->
+              <circle cx="45" cy="38" r="22" fill="#FFDAB9"/>
+              <!-- 头发 -->
+              <ellipse cx="45" cy="20" rx="18" ry="10" fill="#1a1a2e"/>
+              <circle cx="28" cy="28" r="8" fill="#1a1a2e"/>
+              <circle cx="62" cy="28" r="8" fill="#1a1a2e"/>
+              <!-- 丸子头 -->
+              <circle cx="28" cy="20" r="6" fill="#e8002d"/>
+              <circle cx="62" cy="20" r="6" fill="#e8002d"/>
+              <!-- 眼睛（熊猫眼） -->
+              <ellipse cx="37" cy="37" rx="8" ry="6" fill="#1a0a00"/>
+              <ellipse cx="53" cy="37" rx="8" ry="6" fill="#1a0a00"/>
+              <circle cx="37" cy="37" r="3.5" fill="#00e5ff"/>
+              <circle cx="53" cy="37" r="3.5" fill="#00e5ff"/>
+              <circle cx="38.2" cy="35.8" r="1.2" fill="#fff"/>
+              <circle cx="54.2" cy="35.8" r="1.2" fill="#fff"/>
+              <!-- 嘴 -->
+              <path d="M 39 46 Q 45 51 51 46" stroke="#c0392b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- 红兜兜 -->
+              <path d="M 30 55 Q 45 50 60 55 L 58 68 Q 45 72 32 68 Z" fill="#e8002d"/>
+              <!-- 腿 -->
+              <rect x="32" y="92" width="11" height="18" rx="4" fill="#2c3e50"/>
+              <rect x="47" y="92" width="11" height="18" rx="4" fill="#2c3e50"/>
+              <!-- 火焰 -->
+              <ellipse cx="33" cy="112" rx="9" ry="5" fill="#ff6a00" opacity="0.8"/>
+              <ellipse cx="57" cy="112" rx="9" ry="5" fill="#ff6a00" opacity="0.8"/>
+              <!-- 手臂 -->
+              <rect x="12" y="58" width="18" height="10" rx="5" fill="#FFDAB9"/>
+              <rect x="60" y="58" width="18" height="10" rx="5" fill="#FFDAB9"/>
+              <!-- 混天绫 -->
+              <path d="M 5 55 Q 15 45 30 58" stroke="#e8002d" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <path d="M 85 55 Q 75 45 60 58" stroke="#e8002d" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="char-name">哪吒</div>
+        <div class="char-title" style="color:#ff4757">魔丸转世 · 天命叛逆者</div>
+        <div class="char-tags">
+          <span class="tag">主角</span>
+          <span class="tag">混沌之力</span>
+          <span class="tag">反叛</span>
+          <span class="tag">成长型</span>
+        </div>
+        <p class="char-desc">生而为魔，却选择做英雄。熊猫眼、红兜兜，外表桀骜不驯，内心渴望被认可。手持火尖枪、脚踏风火轮，以混天绫斩断命运之锁。</p>
+      </div>
+
+      <!-- 敖丙 -->
+      <div class="char-card fade-in" style="--char-glow: rgba(0,102,255,0.5); --char-color: #00e5ff;">
+        <div class="char-avatar">
+          <div class="char-avatar-bg" style="background: linear-gradient(135deg, #00020f, #001a3d); --char-dark:#00020f;">
+            <svg width="90" height="120" viewBox="0 0 90 120" style="position:relative;z-index:1">
+              <!-- 敖丙形象 -->
+              <rect x="30" y="55" width="30" height="40" rx="5" fill="#0055aa" opacity="0.9"/>
+              <circle cx="45" cy="38" r="22" fill="#e8f4f8"/>
+              <!-- 头发 白色长发 -->
+              <rect x="27" y="15" width="36" height="12" rx="6" fill="#ffffff"/>
+              <rect x="22" y="25" width="8" height="50" rx="4" fill="#ffffff" opacity="0.8"/>
+              <rect x="60" y="25" width="8" height="50" rx="4" fill="#ffffff" opacity="0.8"/>
+              <!-- 眼睛 -->
+              <ellipse cx="37" cy="37" rx="6" ry="5" fill="#003377"/>
+              <ellipse cx="53" cy="37" rx="6" ry="5" fill="#003377"/>
+              <circle cx="37" cy="37" r="3" fill="#00ccff"/>
+              <circle cx="53" cy="37" r="3" fill="#00ccff"/>
+              <circle cx="38" cy="36" r="1" fill="#fff"/>
+              <circle cx="54" cy="36" r="1" fill="#fff"/>
+              <!-- 嘴 -->
+              <path d="M 40 46 Q 45 49 50 46" stroke="#7ec8e3" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- 龙鳞纹 -->
+              <path d="M 30 60 Q 45 56 60 60" stroke="#00aaff" stroke-width="1" fill="none" opacity="0.5"/>
+              <path d="M 31 66 Q 45 62 59 66" stroke="#00aaff" stroke-width="1" fill="none" opacity="0.5"/>
+              <!-- 腿 -->
+              <rect x="32" y="92" width="11" height="18" rx="4" fill="#003377"/>
+              <rect x="47" y="92" width="11" height="18" rx="4" fill="#003377"/>
+              <!-- 手臂 -->
+              <rect x="12" y="58" width="18" height="10" rx="5" fill="#e8f4f8"/>
+              <rect x="60" y="58" width="18" height="10" rx="5" fill="#e8f4f8"/>
+              <!-- 龙鳞披风 -->
+              <path d="M 5 50 Q 18 65 30 70" stroke="#0088cc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <path d="M 85 50 Q 72 65 60 70" stroke="#0088cc" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7"/>
+            </svg>
+          </div>
+        </div>
+        <div class="char-name">敖丙</div>
+        <div class="char-title" style="color:#00e5ff">龙族太子 · 枷锁之人</div>
+        <div class="char-tags">
+          <span class="tag">男二</span>
+          <span class="tag">龙族之力</span>
+          <span class="tag">矛盾</span>
+          <span class="tag">羁绊型</span>
+        </div>
+        <p class="char-desc">龙王之子，背负族群复兴的重托。外表温文儒雅，内心压抑痛苦。与哪吒是最知心的朋友，也是被命运推向对立的宿敌。</p>
+      </div>
+
+      <!-- 李靖 -->
+      <div class="char-card fade-in" style="--char-glow: rgba(255,215,0,0.4); --char-color: #ffd700;">
+        <div class="char-avatar">
+          <div class="char-avatar-bg" style="background: linear-gradient(135deg, #1a1200, #2d2000); --char-dark:#1a1200;">
+            <svg width="90" height="120" viewBox="0 0 90 120" style="position:relative;z-index:1">
+              <!-- 李靖 将军形象 -->
+              <!-- 铠甲身体 -->
+              <rect x="26" y="53" width="38" height="45" rx="4" fill="#8B6914" opacity="0.9"/>
+              <rect x="26" y="53" width="38" height="10" rx="4" fill="#c9a227"/>
+              <!-- 头 -->
+              <circle cx="45" cy="35" r="21" fill="#DEB887"/>
+              <!-- 铠甲头盔 -->
+              <path d="M 24 30 Q 45 12 66 30 L 66 38 Q 45 32 24 38 Z" fill="#8B6914"/>
+              <rect x="30" y="28" width="30" height="6" rx="2" fill="#c9a227"/>
+              <!-- 眼睛 -->
+              <ellipse cx="37" cy="37" rx="5" ry="4" fill="#3d2b1f"/>
+              <ellipse cx="53" cy="37" rx="5" ry="4" fill="#3d2b1f"/>
+              <circle cx="37" cy="37" r="2.5" fill="#8B4513"/>
+              <circle cx="53" cy="37" r="2.5" fill="#8B4513"/>
+              <circle cx="37.8" cy="36.2" r="0.8" fill="#fff"/>
+              <circle cx="53.8" cy="36.2" r="0.8" fill="#fff"/>
+              <!-- 胡须 -->
+              <path d="M 36 46 Q 40 50 45 48 Q 50 50 54 46" stroke="#5c3d1e" stroke-width="2" fill="none"/>
+              <path d="M 40 47 L 38 55" stroke="#5c3d1e" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M 45 48 L 45 56" stroke="#5c3d1e" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M 50 47 L 52 55" stroke="#5c3d1e" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- 腿 -->
+              <rect x="32" y="95" width="11" height="16" rx="4" fill="#5c3d00"/>
+              <rect x="47" y="95" width="11" height="16" rx="4" fill="#5c3d00"/>
+              <!-- 手臂 -->
+              <rect x="10" y="56" width="16" height="10" rx="5" fill="#8B6914"/>
+              <rect x="64" y="56" width="16" height="10" rx="5" fill="#8B6914"/>
+              <!-- 宝塔 -->
+              <rect x="68" y="42" width="12" height="20" rx="2" fill="#c9a227" opacity="0.9"/>
+              <polygon points="68,42 80,42 74,34" fill="#ffd700" opacity="0.9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="char-name">李靖</div>
+        <div class="char-title" style="color:#ffd700">陈塘关总兵 · 父如山岳</div>
+        <div class="char-tags">
+          <span class="tag">父亲</span>
+          <span class="tag">天庭之力</span>
+          <span class="tag">守护者</span>
+          <span class="tag">牺牲型</span>
+        </div>
+        <p class="char-desc">威严的将军，深爱哪吒却不知如何表达。为保护儿子甘愿以身代天劫，他的爱从不言说，却重于泰山。</p>
+      </div>
+
+      <!-- 申公豹 -->
+      <div class="char-card fade-in" style="--char-glow: rgba(124,58,237,0.5); --char-color: #a855f7;">
+        <div class="char-avatar">
+          <div class="char-avatar-bg" style="background: linear-gradient(135deg, #0d0020, #1a0035); --char-dark:#0d0020;">
+            <svg width="90" height="120" viewBox="0 0 90 120" style="position:relative;z-index:1">
+              <!-- 申公豹 -->
+              <rect x="28" y="53" width="34" height="45" rx="5" fill="#2d0050" opacity="0.9"/>
+              <!-- 头 豹首人身 -->
+              <ellipse cx="45" cy="36" rx="22" ry="24" fill="#8B4513"/>
+              <!-- 豹纹 -->
+              <circle cx="35" cy="30" r="4" fill="#5c2d00" opacity="0.6"/>
+              <circle cx="55" cy="30" r="4" fill="#5c2d00" opacity="0.6"/>
+              <circle cx="45" cy="25" r="3" fill="#5c2d00" opacity="0.6"/>
+              <circle cx="38" cy="42" r="3" fill="#5c2d00" opacity="0.6"/>
+              <circle cx="52" cy="42" r="3" fill="#5c2d00" opacity="0.6"/>
+              <!-- 耳朵 -->
+              <polygon points="26,20 34,12 38,24" fill="#8B4513"/>
+              <polygon points="64,20 56,12 52,24" fill="#8B4513"/>
+              <!-- 眼睛 -->
+              <ellipse cx="37" cy="35" rx="7" ry="6" fill="#1a0035"/>
+              <ellipse cx="53" cy="35" rx="7" ry="6" fill="#1a0035"/>
+              <circle cx="37" cy="35" r="3.5" fill="#9b59b6"/>
+              <circle cx="53" cy="35" r="3.5" fill="#9b59b6"/>
+              <circle cx="37.8" cy="34" r="1.2" fill="#fff"/>
+              <circle cx="53.8" cy="34" r="1.2" fill="#fff"/>
+              <!-- 嘴 -->
+              <path d="M 38 46 Q 45 52 52 46" stroke="#c0392b" stroke-width="2" fill="none"/>
+              <!-- 獠牙 -->
+              <polygon points="42,48 40,54 44,48" fill="#fff" opacity="0.9"/>
+              <polygon points="48,48 50,54 46,48" fill="#fff" opacity="0.9"/>
+              <!-- 法袍装饰 -->
+              <circle cx="45" cy="65" r="8" fill="none" stroke="#9b59b6" stroke-width="1.5" opacity="0.6"/>
+              <!-- 腿 -->
+              <rect x="32" y="95" width="11" height="16" rx="4" fill="#1a0035"/>
+              <rect x="47" y="95" width="11" height="16" rx="4" fill="#1a0035"/>
+              <!-- 手臂 -->
+              <rect x="10" y="56" width="18" height="10" rx="5" fill="#8B4513"/>
+              <rect x="62" y="56" width="18" height="10" rx="5" fill="#8B4513"/>
+            </svg>
+          </div>
+        </div>
+        <div class="char-name">申公豹</div>
+        <div class="char-title" style="color:#a855f7">天庭弃徒 · 暗中推手</div>
+        <div class="char-tags">
+          <span class="tag">反派</span>
+          <span class="tag">妖力</span>
+          <span class="tag">复仇</span>
+          <span class="tag">悲剧型</span>
+        </div>
+        <p class="char-desc">豹首人身，曾是元始天尊最优秀的弟子，却因出身被拒于仙班之外。嫉恨与怨恨化为推动阴谋的力量，却也是最可悲的受害者。</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- 故事大纲 -->
+<section id="story">
+  <p class="section-label fade-in">Story Arc</p>
+  <h2 class="section-title fade-in">故事大纲 · 十二章</h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="story-timeline">
+
+    <div class="story-ep" style="--ep-color: #e8002d">
+      <p class="ep-num">第一章 · PROLOGUE</p>
+      <h3 class="ep-title">魔丸降世</h3>
+      <p class="ep-desc">混沌珠落入凡间，分裂为灵珠与魔丸。申公豹暗中调换，将魔丸送入殷夫人腹中。哪吒在雷电交加中出生，陈塘关百姓惶惶不安。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #ff6a00">
+      <p class="ep-num">第二章 · OUTCAST</p>
+      <h3 class="ep-title">被囚的少年</h3>
+      <p class="ep-desc">父亲以"保护百姓"为由将哪吒困于府中，无法出门的哪吒只能在院子里独自玩耍，用捣蛋来排解孤独。一道结界，隔绝了他与世界的联结。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #ffd700">
+      <p class="ep-num">第三章 · ENCOUNTER</p>
+      <h3 class="ep-title">命中注定的相遇</h3>
+      <p class="ep-desc">哪吒偷溜出府，在海边与敖丙相遇。两个被命运设定为对立的少年，却在踢毽子中结成最深的友谊——那一刻，他们都忘记了各自背负的枷锁。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #10b981">
+      <p class="ep-num">第四章 · AWAKENING</p>
+      <h3 class="ep-title">力量觉醒</h3>
+      <p class="ep-desc">妖怪袭击村庄，哪吒第一次在战斗中感受到体内混沌之力的涌动。他击退了妖怪，却也让百姓对他的恐惧加深——救了他们的人，反被他们驱逐。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #0066ff">
+      <p class="ep-num">第五章 · TRUTH</p>
+      <h3 class="ep-title">天命真相</h3>
+      <p class="ep-desc">哪吒偶然发现天命簿上关于自己的记载——在十六岁生辰当天，天雷将降，将他与整座陈塘关一同毁灭。父亲一直瞒着他，独自承受着这一切。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #7c3aed">
+      <p class="ep-num">第六章 · DESPAIR</p>
+      <h3 class="ep-title">绝望与崩溃</h3>
+      <p class="ep-desc">知道真相的哪吒陷入崩溃，魔丸之力几乎将他吞噬。他质问苍天：为什么生而为人，却不被当人看？这一夜，他差点选择了毁灭一切。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #e8002d">
+      <p class="ep-num">第七章 · REBELLION</p>
+      <h3 class="ep-title">逆天之誓</h3>
+      <p class="ep-desc">父亲李靖找到哪吒，第一次说出心里话。哪吒第一次感受到被父亲理解。他握紧火尖枪，立下誓言：我命由我不由天。这一刻，他成为了真正的英雄。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #ff6a00">
+      <p class="ep-num">第八章 · BETRAYAL</p>
+      <h3 class="ep-title">友情的裂痕</h3>
+      <p class="ep-desc">申公豹逼迫敖丙用龙族万龙甲冻封陈塘关，以保全龙族。敖丙在友情与族责之间痛苦挣扎，最终选择了龙族——他对哪吒说：对不起，这是命。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #ffd700">
+      <p class="ep-num">第九章 · SACRIFICE</p>
+      <h3 class="ep-title">父亲的重量</h3>
+      <p class="ep-desc">李靖拿出换命符，打算以自己的命换取哪吒的天劫延期。哪吒发现后夺下符咒，亲手毁掉——「你已经用生命爱了我十六年，够了。」</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #00e5ff">
+      <p class="ep-num">第十章 · REDEMPTION</p>
+      <h3 class="ep-title">敖丙的抉择</h3>
+      <p class="ep-desc">目睹哪吒独自抗天劫，敖丙在最后时刻做出选择——他脱下万龙甲，与哪吒并肩而立，共同承受天劫。「若命运不公，便与你共同打破它。」</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #e8002d">
+      <p class="ep-num">第十一章 · CLIMAX</p>
+      <h3 class="ep-title">天地一战</h3>
+      <p class="ep-desc">哪吒与敖丙合力，以混沌之力与龙族之力交融，形成前所未有的力量。天雷一轮轮降下，两人不退一步。陈塘关的百姓第一次，选择站在哪吒身后。</p>
+    </div>
+
+    <div class="story-ep" style="--ep-color: #ffd700">
+      <p class="ep-num">第十二章 · EPILOGUE</p>
+      <h3 class="ep-title">我命由我</h3>
+      <p class="ep-desc">天劫散去，两人的肉身在冲击中化为灰烬，但魂魄留在了莲花之中。天命簿上关于哪吒的记载，第一次被改写——不是"魔丸转世"，而是"天命逆转者"。</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- 技能系统 -->
+<section id="skills">
+  <p class="section-label fade-in">Combat System</p>
+  <h2 class="section-title fade-in">哪吒 · 战斗技能</h2>
+  <div class="section-divider fade-in"></div>
+
+  <div class="skills-grid">
+    <div class="skill-item fade-in">
+      <span class="skill-icon">🔱</span>
+      <div class="skill-name">火尖枪</div>
+      <div class="skill-desc">以混沌火焰淬炼的神兵，可聚焦魔丸之力，一击穿透天庭护盾</div>
+    </div>
+    <div class="skill-item fade-in">
+      <span class="skill-icon">🌀</span>
+      <div class="skill-name">混天绫</div>
+      <div class="skill-desc">赤红神绫，可缠绕控制，展开时化为火焰屏障，阻挡万物</div>
+    </div>
+    <div class="skill-item fade-in">
+      <span class="skill-icon">🌪️</span>
+      <div class="skill-name">风火轮</div>
+      <div class="skill-desc">脚踏风火轮，可突破音速，在天地间自由翱翔</div>
+    </div>
+    <div class="skill-item fade-in">
+      <span class="skill-icon">💥</span>
+      <div class="skill-name">魔丸爆发</div>
+      <div class="skill-desc">释放体内魔丸之力，化为混沌形态，力量倍增，但意识将逐渐被魔力侵蚀</div>
+    </div>
+    <div class="skill-item fade-in">
+      <span class="skill-icon">🌸</span>
+      <div class="skill-name">莲花化身</div>
+      <div class="skill-desc">以莲花重塑肉身，灵魂不灭之术，是哪吒最终战胜天命的关键</div>
+    </div>
+    <div class="skill-item fade-in">
+      <span class="skill-icon">⚡</span>
+      <div class="skill-name">天雷反噬</div>
+      <div class="skill-desc">将天雷转化为自身能量，以天命的力量打破天命，逆转乾坤</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>《哪吒·天命逆转》NEZHA: FATE REVERSED</p>
+  <p style="margin-top:0.5rem">原创动漫企划 · <span>2026</span> · 概念设计稿</p>
+  <p style="margin-top:1rem; font-size:0.75rem; opacity:0.6;">「生而为魔，逆天改命」— 每个人都是自己命运的主人</p>
+  <p style="margin-top:1.5rem; font-size:0.9rem; letter-spacing:0.15em; color:rgba(255,215,0,0.7);">杭州君器智能科技有限公司 出品</p>
+</footer>
+
+<script>
+// ===== 粒子系统 =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = -Math.random() * 0.5 - 0.2;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.color = Math.random() > 0.6
+      ? `rgba(255, ${Math.floor(Math.random()*100+50)}, 0, ${this.opacity})`
+      : `rgba(255, 215, 0, ${this.opacity * 0.5})`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.y < -10) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== 底部火焰 =====
+const flameCanvas = document.getElementById('flameCanvas');
+const fCtx = flameCanvas.getContext('2d');
+flameCanvas.width = window.innerWidth;
+flameCanvas.height = 200;
+window.addEventListener('resize', () => {
+  flameCanvas.width = window.innerWidth;
+});
+
+let flameParticles = [];
+class FlameParticle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * flameCanvas.width;
+    this.y = flameCanvas.height;
+    this.vx = (Math.random() - 0.5) * 2;
+    this.vy = -(Math.random() * 3 + 2);
+    this.life = 1;
+    this.decay = Math.random() * 0.02 + 0.01;
+    this.size = Math.random() * 12 + 4;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life -= this.decay;
+    this.size *= 0.98;
+    if (this.life <= 0) this.reset();
+  }
+  draw() {
+    const gradient = fCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+    gradient.addColorStop(0, `rgba(255, 255, 200, ${this.life * 0.9})`);
+    gradient.addColorStop(0.3, `rgba(255, 100, 0, ${this.life * 0.7})`);
+    gradient.addColorStop(0.7, `rgba(200, 0, 0, ${this.life * 0.4})`);
+    gradient.addColorStop(1, 'transparent');
+    fCtx.save();
+    fCtx.globalCompositeOperation = 'lighter';
+    fCtx.fillStyle = gradient;
+    fCtx.beginPath();
+    fCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    fCtx.fill();
+    fCtx.restore();
+  }
+}
+
+for (let i = 0; i < 80; i++) {
+  const p = new FlameParticle();
+  p.y = Math.random() * flameCanvas.height;
+  flameParticles.push(p);
+}
+
+function animateFlame() {
+  fCtx.clearRect(0, 0, flameCanvas.width, flameCanvas.height);
+  flameParticles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateFlame);
+}
+animateFlame();
+
+// ===== 滚动进入动画 =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-in, .story-ep').forEach(el => observer.observe(el));
+
+// ===== 故事章节延迟动画 =====
+const storyEps = document.querySelectorAll('.story-ep');
+storyEps.forEach((ep, i) => {
+  ep.style.transitionDelay = `${i * 0.05}s`;
+});
+
+// ===== 鼠标视差 =====
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 20;
+  const y = (e.clientY / window.innerHeight - 0.5) * 10;
+  const ring = document.querySelector('.fire-ring');
+  if (ring) {
+    ring.style.transform = `rotate(${Date.now()/8000 * 360}deg) translate(${x*0.3}px, ${y*0.3}px)`;
+  }
+});
+</script>
+</body>
+</html>
