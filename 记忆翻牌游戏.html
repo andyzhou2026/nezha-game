@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>记忆翻牌 - 趣味益智游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .game-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-item strong {
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .game-container {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            animation: matchSuccess 0.6s ease-out;
+        }
+
+        .card.matched .card-front {
+            background: linear-gradient(135deg, #00ff88 0%, #00d4aa 100%);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 212, 170, 0.5);
+            border: 4px solid #00ff88;
+        }
+
+        @keyframes matchSuccess {
+            0% {
+                transform: rotateY(180deg) scale(1);
+            }
+            50% {
+                transform: rotateY(180deg) scale(1.2);
+                box-shadow: 0 0 40px rgba(0, 255, 136, 1), 0 0 80px rgba(0, 212, 170, 0.8);
+            }
+            100% {
+                transform: rotateY(180deg) scale(0.95);
+                box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 212, 170, 0.5);
+            }
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: rotateY(180deg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(1);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-back::after {
+            content: '?';
+            font-size: 3rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalIn 0.5s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .modal-content p {
+            font-size: 1.3rem;
+            margin: 10px 0;
+        }
+
+        .modal-content .score {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #ffd700;
+        }
+
+        .modal-content .stars {
+            font-size: 3rem;
+            margin: 20px 0;
+            color: #ffd700;
+            animation: starBounce 1s ease infinite;
+        }
+
+        @keyframes starBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .difficulty-selector {
+            margin-bottom: 20px;
+        }
+
+        .difficulty-selector label {
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        .difficulty-selector select {
+            padding: 8px 20px;
+            font-size: 1rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                width: 60px;
+                height: 60px;
+            }
+
+            .card-face {
+                font-size: 2rem;
+            }
+
+            .game-info {
+                gap: 15px;
+            }
+
+            .info-item {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card {
+                width: 50px;
+                height: 50px;
+            }
+
+            .card-face {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 记忆翻牌</h1>
+        <p>翻开两张相同的卡片，完成所有配对！</p>
+    </div>
+
+    <div class="game-info">
+        <div class="info-item">
+            步数: <strong id="moves">0</strong>
+        </div>
+        <div class="info-item">
+            时间: <strong id="timer">00:00</strong>
+        </div>
+        <div class="info-item">
+            匹配: <strong id="matches">0</strong>/<span id="totalPairs">8</span>
+        </div>
+    </div>
+
+    <div class="difficulty-selector">
+        <label for="difficulty">难度：</label>
+        <select id="difficulty">
+            <option value="4">简单 (4×4)</option>
+            <option value="6">中等 (6×6)</option>
+            <option value="8">困难 (8×8)</option>
+        </select>
+    </div>
+
+    <div class="game-container" id="gameContainer"></div>
+
+    <div class="controls">
+        <button class="btn btn-primary" onclick="startGame()">🔄 重新开始</button>
+        <button class="btn btn-secondary" onclick="showHelp()">❓ 游戏说明</button>
+    </div>
+
+    <!-- 胜利弹窗 -->
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <div class="stars">⭐⭐⭐</div>
+            <h2>🎉 恭喜通关！</h2>
+            <div class="score">
+                <p>用时: <span id="finalTime">00:00</span></p>
+                <p>步数: <span id="finalMoves">0</span></p>
+            </div>
+            <p>你的记忆力太棒了！</p>
+            <button class="btn btn-primary" onclick="closeModal(); startGame();">再玩一局</button>
+        </div>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <h2>📖 游戏说明</h2>
+            <div style="text-align: left; margin: 20px 0; line-height: 2;">
+                <p>1️⃣ 点击任意卡片翻看图案</p>
+                <p>2️⃣ 连续翻开两张卡片</p>
+                <p>3️⃣ 如果图案相同则消除，不同则翻回</p>
+                <p>4️⃣ 用最少的步数和时间完成所有配对</p>
+                <p>5️⃣ 可选择不同难度挑战自己</p>
+            </div>
+            <button class="btn btn-primary" onclick="closeHelp()">明白了！</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let gameTimer = null;
+        let gameTime = 0;
+        let isProcessing = false;
+        let totalPairs = 8;
+
+        // 卡片图案（emoji）
+        const cardSymbols = [
+            '🍎', '🍊', '🍋', '🍇', '🍓', '🍑', '🍒', '🥝',
+            '🌸', '🌺', '🌻', '🌹', '🌷', '💐', '🌼', '🍀',
+            '🐶', '🐱', '🐼', '🐨', '🦁', '🐯', '🦊', '🐸',
+            '⚽', '🏀', '🎾', '🏈', '⚾', '🎱', '🏐', '🎾'
+        ];
+
+        // 初始化游戏
+        function initGame() {
+            const difficulty = document.getElementById('difficulty').value;
+            const gridSize = parseInt(difficulty);
+            totalPairs = (gridSize * gridSize) / 2;
+
+            // 更新显示的总配对数
+            document.getElementById('totalPairs').textContent = totalPairs;
+
+            // 选取卡片符号
+            const selectedSymbols = cardSymbols.slice(0, totalPairs);
+            cards = [...selectedSymbols, ...selectedSymbols];
+
+            // 洗牌
+            shuffle(cards);
+
+            // 创建游戏网格
+            createGrid(gridSize);
+        }
+
+        // 洗牌算法
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // 创建网格
+        function createGrid(size) {
+            const container = document.getElementById('gameContainer');
+            container.innerHTML = '';
+            container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+
+            cards.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                card.dataset.symbol = symbol;
+
+                const front = document.createElement('div');
+                front.className = 'card-face card-front';
+                front.textContent = symbol;
+
+                const back = document.createElement('div');
+                back.className = 'card-face card-back';
+
+                card.appendChild(front);
+                card.appendChild(back);
+
+                card.addEventListener('click', () => flipCard(card));
+
+                container.appendChild(card);
+            });
+        }
+
+        // 翻牌
+        function flipCard(card) {
+            // 防止重复点击和正在处理中
+            if (isProcessing || card.classList.contains('flipped') || card.classList.contains('matched')) {
+                return;
+            }
+
+            // 翻转卡片
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            // 检查是否翻开两张
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+
+                // 开始计时（第一次翻牌时）
+                if (moves === 1) {
+                    startTimer();
+                }
+
+                checkMatch();
+            }
+        }
+
+        // 检查配对
+        function checkMatch() {
+            isProcessing = true;
+            const [card1, card2] = flippedCards;
+            const symbol1 = card1.dataset.symbol;
+            const symbol2 = card2.dataset.symbol;
+
+            if (symbol1 === symbol2) {
+                // 配对成功
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                document.getElementById('matches').textContent = matchedPairs;
+
+                // 添加配对成功音效（可选）
+                playMatchSound();
+
+                flippedCards = [];
+                isProcessing = false;
+
+                // 检查是否获胜
+                if (matchedPairs === totalPairs) {
+                    setTimeout(showWin, 500);
+                }
+            } else {
+                // 配对失败，延迟翻回
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+                    isProcessing = false;
+                }, 1000);
+            }
+        }
+
+        // 计时器
+        function startTimer() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+            }
+            gameTime = 0;
+            gameTimer = setInterval(() => {
+                gameTime++;
+                const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
+                const seconds = (gameTime % 60).toString().padStart(2, '0');
+                document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        // 停止计时器
+        function stopTimer() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+        }
+
+        // 开始游戏
+        function startGame() {
+            // 重置状态
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            gameTime = 0;
+            isProcessing = false;
+
+            // 更新显示
+            document.getElementById('moves').textContent = '0';
+            document.getElementById('timer').textContent = '00:00';
+            document.getElementById('matches').textContent = '0';
+
+            // 停止计时器
+            stopTimer();
+
+            // 重新初始化游戏
+            initGame();
+        }
+
+        // 显示胜利弹窗
+        function showWin() {
+            stopTimer();
+
+            const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
+            const seconds = (gameTime % 60).toString().padStart(2, '0');
+
+            document.getElementById('finalTime').textContent = `${minutes}:${seconds}`;
+            document.getElementById('finalMoves').textContent = moves;
+
+            // 计算星级
+            const stars = calculateStars(moves, totalPairs);
+            document.querySelector('#winModal .stars').textContent = stars;
+
+            document.getElementById('winModal').classList.add('show');
+        }
+
+        // 计算星级
+        function calculateStars(moves, pairs) {
+            const minMoves = pairs;
+            const ratio = moves / minMoves;
+
+            if (ratio <= 1.2) return '⭐⭐⭐';
+            if (ratio <= 1.5) return '⭐⭐';
+            return '⭐';
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('winModal').classList.remove('show');
+        }
+
+        // 显示帮助
+        function showHelp() {
+            document.getElementById('helpModal').classList.add('show');
+        }
+
+        // 关闭帮助
+        function closeHelp() {
+            document.getElementById('helpModal').classList.remove('show');
+        }
+
+        // 难度改变时重新开始游戏
+        document.getElementById('difficulty').addEventListener('change', startGame);
+
+        // 点击弹窗外部关闭
+        document.getElementById('winModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('helpModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeHelp();
+            }
+        });
+
+        // 页面加载完成后初始化游戏
+        window.onload = function() {
+            initGame();
+        };
+
+        // 配对成功音效（使用 Web Audio API）
+        function playMatchSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                // 配置音效：愉悦的上升音调
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (error) {
+                // 音频不支持时静默失败
+                console.log('Audio not supported');
+            }
+        }
+    </script>
+</body>
+</html>
