@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDCCK 管理后台 - 数据管理</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: #f0f2f5; }
+        
+        .header { background: #0D2D5A; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .header .btn { background: #D4AF37; color: #0D2D5A; padding: 8px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
+        
+        .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+        
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { padding: 12px 24px; background: white; border: none; cursor: pointer; font-size: 14px; color: #666; border-radius: 6px 6px 0 0; transition: all 0.3s; }
+        .tab:hover { background: #e9ecef; }
+        .tab.active { background: #0D2D5A; color: white; }
+        
+        .panel { background: white; border-radius: 0 6px 6px 6px; padding: 30px; display: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .panel.active { display: block; }
+        
+        .panel h2 { font-size: 18px; color: #0D2D5A; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #D4AF37; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; color: #333; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #0D2D5A; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        
+        .item-list { margin-top: 20px; }
+        .item-card { background: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 6px; border-left: 4px solid #D4AF37; display: flex; justify-content: space-between; align-items: center; }
+        .item-card .info { flex: 1; }
+        .item-card .info h4 { font-size: 15px; color: #0D2D5A; margin-bottom: 5px; }
+        .item-card .info p { font-size: 13px; color: #666; }
+        .item-card .actions { display: flex; gap: 10px; }
+        .item-card .actions button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .item-card .actions .edit { background: #0D2D5A; color: white; }
+        .item-card .actions .delete { background: #dc3545; color: white; }
+        
+        .add-btn { background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+        .add-btn:hover { background: #218838; }
+        
+        .save-btn { background: #0D2D5A; color: white; padding: 12px 40px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        .save-btn:hover { background: #1a4270; }
+        
+        .alert { padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
+        .alert.success { background: #d4edda; color: #155724; }
+        .alert.error { background: #f8d7da; color: #721c24; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .stat-box { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+        .stat-box input { text-align: center; font-size: 24px; font-weight: bold; color: #0D2D5A; }
+        
+        .preview-link { display: inline-block; margin-left: 20px; color: #0D2D5A; text-decoration: none; font-size: 14px; }
+        .preview-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-cog"></i> GDCCK 管理后台</h1>
+        <div>
+            <a href="index.html" class="btn" target="_blank"><i class="fas fa-eye"></i> 查看网站</a>
+            <button class="btn" onclick="saveAllData()"><i class="fas fa-save"></i> 保存所有修改</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert" id="alert"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('settings')">基本设置</button>
+            <button class="tab" onclick="switchTab('stats')">数据统计</button>
+            <button class="tab" onclick="switchTab('news')">新闻管理</button>
+            <button class="tab" onclick="switchTab('partners')">合作伙伴</button>
+            <button class="tab" onclick="switchTab('members')">会员企业</button>
+            <button class="tab" onclick="switchTab('services')">服务项目</button>
+            <button class="tab" onclick="switchTab('gallery')">活动相册</button>
+            <button class="tab" onclick="switchTab('chairman')">会长致辞</button>
+        </div>
+
+        <!-- 基本设置 -->
+        <div class="panel active" id="panel-settings">
+            <h2><i class="fas fa-cog"></i> 基本信息设置</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>商会名称（中文）</label>
+                    <input type="text" id="siteName" onchange="updateData('settings.siteName', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>商会名称（英文）</label>
+                    <input type="text" id="siteNameEn" onchange="updateData('settings.siteNameEn', this.value)">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="text" id="phone" onchange="updateData('settings.phone', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>电子邮箱</label>
+                    <input type="text" id="email" onchange="updateData('settings.email', this.value)">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>商会地址（哈萨克斯坦）</label>
+                <input type="text" id="address" onchange="updateData('settings.address', this.value)">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>广州代表处</label>
+                    <input type="text" id="addressCn" onchange="updateData('settings.addressCn', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>北京代表处</label>
+                    <input type="text" id="addressBj" onchange="updateData('settings.addressBj', this.value)">
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据统计 -->
+        <div class="panel" id="panel-stats">
+            <h2><i class="fas fa-chart-bar"></i> 数据统计设置</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <label>会员企业数量</label>
+                    <input type="number" id="statMembers" onchange="updateData('stats.members', parseInt(this.value))">
+                </div>
+                <div class="stat-box">
+                    <label>成立年数</label>
+                    <input type="number" id="statYears" onchange="updateData('stats.years', parseInt(this.value))">
+                </div>
+                <div class="stat-box">
+                    <label>年贸易额（亿美元）</label>
+                    <input type="number" id="statTrade" onchange="updateData('stats.trade', parseInt(this.value))">
+                </div>
+                <div class="stat-box">
+                    <label>合作项目数量</label>
+                    <input type="number" id="statProjects" onchange="updateData('stats.projects', parseInt(this.value))">
+                </div>
+            </div>
+        </div>
+
+        <!-- 新闻管理 -->
+        <div class="panel" id="panel-news">
+            <h2><i class="fas fa-newspaper"></i> 新闻动态管理</h2>
+            <button class="add-btn" onclick="addNews()"><i class="fas fa-plus"></i> 添加新闻</button>
+            <div class="item-list" id="newsList"></div>
+        </div>
+
+        <!-- 合作伙伴 -->
+        <div class="panel" id="panel-partners">
+            <h2><i class="fas fa-handshake"></i> 合作伙伴管理</h2>
+            <button class="add-btn" onclick="addPartner()"><i class="fas fa-plus"></i> 添加合作伙伴</button>
+            <div class="item-list" id="partnersList"></div>
+        </div>
+
+        <!-- 会员企业 -->
+        <div class="panel" id="panel-members">
+            <h2><i class="fas fa-building"></i> 会员企业管理</h2>
+            <button class="add-btn" onclick="addMember()"><i class="fas fa-plus"></i> 添加会员企业</button>
+            <div class="item-list" id="membersList"></div>
+        </div>
+
+        <!-- 服务项目 -->
+        <div class="panel" id="panel-services">
+            <h2><i class="fas fa-star"></i> 服务项目设置</h2>
+            <button class="add-btn" onclick="addService()"><i class="fas fa-plus"></i> 添加服务</button>
+            <div class="item-list" id="servicesList"></div>
+        </div>
+
+        <!-- 活动相册 -->
+        <div class="panel" id="panel-gallery">
+            <h2><i class="fas fa-images"></i> 活动相册管理</h2>
+            <button class="add-btn" onclick="addGallery()"><i class="fas fa-plus"></i> 添加照片</button>
+            <div class="item-list" id="galleryList"></div>
+        </div>
+
+        <!-- 会长致辞 -->
+        <div class="panel" id="panel-chairman">
+            <h2><i class="fas fa-user-tie"></i> 会长致辞设置</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>会长姓名</label>
+                    <input type="text" id="chairmanName" onchange="updateData('chairman.name', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>职务</label>
+                    <input type="text" id="chairmanTitle" onchange="updateData('chairman.title', this.value)">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>致辞内容（每段一行）</label>
+                <textarea id="chairmanContent" onchange="updateChairman'sContent()" rows="8"></textarea>
+            </div>
+            <div class="form-group">
+                <label>日期</label>
+                <input type="text" id="chairmanDate" onchange="updateData('chairman.date', this.value)">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let appData = {};
+
+        // 加载数据
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                appData = await response.json();
+                renderAllData();
+            } catch (e) {
+                showAlert('加载数据失败: ' + e.message, 'error');
+            }
+        }
+
+        // 渲染所有数据到表单
+        function renderAllData() {
+            // 基本设置
+            document.getElementById('siteName').value = appData.settings.siteName || '';
+            document.getElementById('siteNameEn').value = appData.settings.siteNameEn || '';
+            document.getElementById('phone').value = appData.settings.phone || '';
+            document.getElementById('email').value = appData.settings.email || '';
+            document.getElementById('address').value = appData.settings.address || '';
+            document.getElementById('addressCn').value = appData.settings.addressCn || '';
+            document.getElementById('addressBj').value = appData.settings.addressBj || '';
+
+            // 统计数据
+            document.getElementById('statMembers').value = appData.stats.members || 0;
+            document.getElementById('statYears').value = appData.stats.years || 0;
+            document.getElementById('statTrade').value = appData.stats.trade || 0;
+            document.getElementById('statProjects').value = appData.stats.projects || 0;
+
+            // 会长致辞
+            document.getElementById('chairmanName').value = appData.chairman.name || '';
+            document.getElementById('chairmanTitle').value = appData.chairman.title || '';
+            document.getElementById('chairmanContent').value = (appData.chairman.content || []).join('\n');
+            document.getElementById('chairmanDate').value = appData.chairman.date || '';
+
+            // 渲染列表
+            renderNews();
+            renderPartners();
+            renderMembers();
+            renderServices();
+            renderGallery();
+        }
+
+        // 渲染新闻列表
+        function renderNews() {
+            const list = document.getElementById('newsList');
+            list.innerHTML = (appData.news || []).map((item, index) => `
+                <div class="item-card">
+                    <div class="info">
+                        <h4>${item.title}</h4>
+                        <p>${item.category} | ${item.date}</p>
+                    </div>
+                    <div class="actions">
+                        <button class="edit" onclick="editNews(${index})">编辑</button>
+                        <button class="delete" onclick="deleteItem('news', ${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染合作伙伴
+        function renderPartners() {
+            const list = document.getElementById('partnersList');
+            list.innerHTML = (appData.partners || []).map((item, index) => `
+                <div class="item-card">
+                    <div class="info">
+                        <h4>${item.name}</h4>
+                    </div>
+                    <div class="actions">
+                        <button class="edit" onclick="editPartner(${index})">编辑</button>
+                        <button class="delete" onclick="deleteItem('partners', ${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染会员企业
+        function renderMembers() {
+            const list = document.getElementById('membersList');
+            list.innerHTML = (appData.members || []).map((item, index) => `
+                <div class="item-card">
+                    <div class="info">
+                        <h4>${item.name}</h4>
+                        <p>${item.industry}</p>
+                    </div>
+                    <div class="actions">
+                        <button class="edit" onclick="editMember(${index})">编辑</button>
+                        <button class="delete" onclick="deleteItem('members', ${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染服务项目
+        function renderServices() {
+            const list = document.getElementById('servicesList');
+            list.innerHTML = (appData.services || []).map((item, index) => `
+                <div class="item-card">
+                    <div class="info">
+                        <h4>${item.title}</h4>
+                        <p>${item.desc}</p>
+                    </div>
+                    <div class="actions">
+                        <button class="edit" onclick="editService(${index})">编辑</button>
+                        <button class="delete" onclick="deleteItem('services', ${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染相册
+        function renderGallery() {
+            const list = document.getElementById('galleryList');
+            list.innerHTML = (appData.gallery || []).map((item, index) => `
+                <div class="item-card">
+                    <div class="info">
+                        <h4>${item.title}</h4>
+                        <p>${item.image.substring(0, 60)}...</p>
+                    </div>
+                    <div class="actions">
+                        <button class="edit" onclick="editGallery(${index})">编辑</button>
+                        <button class="delete" onclick="deleteItem('gallery', ${index})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 添加新闻
+        function addNews() {
+            const title = prompt('请输入新闻标题:');
+            if (!title) return;
+            const category = prompt('请输入分类（如：商会活动、经贸合作）:', '商会活动') || '商会活动';
+            const date = prompt('请输入日期（格式：2026-03-15）:', new Date().toISOString().split('T')[0]) || new Date().toISOString().split('T')[0];
+            const excerpt = prompt('请输入摘要:') || '';
+            const image = prompt('请输入图片URL:', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=500&fit=crop') || '';
+            
+            appData.news.unshift({ id: Date.now(), title, category, date, excerpt, image, link: '' });
+            renderNews();
+            showAlert('新闻添加成功！', 'success');
+        }
+
+        // 添加合作伙伴
+        function addPartner() {
+            const name = prompt('请输入合作伙伴名称:');
+            if (!name) return;
+            appData.partners.push({ name, icon: 'handshake' });
+            renderPartners();
+            showAlert('合作伙伴添加成功！', 'success');
+        }
+
+        // 添加会员企业
+        function addMember() {
+            const name = prompt('请输入企业名称:');
+            if (!name) return;
+            const industry = prompt('请输入行业:', '制造业') || '制造业';
+            appData.members.push({ name, industry, icon: 'industry' });
+            renderMembers();
+            showAlert('会员企业添加成功！', 'success');
+        }
+
+        // 添加服务
+        function addService() {
+            const title = prompt('请输入服务名称:');
+            if (!title) return;
+            const desc = prompt('请输入服务描述:') || '';
+            appData.services.push({ title, desc, icon: 'star' });
+            renderServices();
+            showAlert('服务项目添加成功！', 'success');
+        }
+
+        // 添加相册
+        function addGallery() {
+            const title = prompt('请输入标题:');
+            if (!title) return;
+            const image = prompt('请输入图片URL:') || '';
+            appData.gallery.push({ title, image });
+            renderGallery();
+            showAlert('相册添加成功！', 'success');
+        }
+
+        // 编辑功能（简化版：删除后重新添加）
+        function editNews(index) {
+            const item = appData.news[index];
+            const newTitle = prompt('编辑标题:', item.title);
+            if (newTitle === null) return;
+            appData.news[index] = { ...item, title: newTitle };
+            renderNews();
+        }
+
+        function editPartner(index) {
+            const item = appData.partners[index];
+            const newName = prompt('编辑名称:', item.name);
+            if (newName === null) return;
+            appData.partners[index] = { ...item, name: newName };
+            renderPartners();
+        }
+
+        function editMember(index) {
+            const item = appData.members[index];
+            const newName = prompt('编辑企业名称:', item.name);
+            if (newName === null) return;
+            const newIndustry = prompt('编辑行业:', item.industry);
+            if (newIndustry === null) return;
+            appData.members[index] = { ...item, name: newName, industry: newIndustry };
+            renderMembers();
+        }
+
+        function editService(index) {
+            const item = appData.services[index];
+            const newTitle = prompt('编辑服务名称:', item.title);
+            if (newTitle === null) return;
+            const newDesc = prompt('编辑描述:', item.desc);
+            if (newDesc === null) return;
+            appData.services[index] = { ...item, title: newTitle, desc: newDesc };
+            renderServices();
+        }
+
+        function editGallery(index) {
+            const item = appData.gallery[index];
+            const newTitle = prompt('编辑标题:', item.title);
+            if (newTitle === null) return;
+            const newImage = prompt('编辑图片URL:', item.image);
+            if (newImage === null) return;
+            appData.gallery[index] = { ...item, title: newTitle, image: newImage };
+            renderGallery();
+        }
+
+        // 删除项目
+        function deleteItem(type, index) {
+            if (!confirm('确定要删除吗？')) return;
+            appData[type].splice(index, 1);
+            if (type === 'news') renderNews();
+            else if (type === 'partners') renderPartners();
+            else if (type === 'members') renderMembers();
+            else if (type === 'services') renderServices();
+            else if (type === 'gallery') renderGallery();
+            showAlert('删除成功！', 'success');
+        }
+
+        // 更新数据
+        function updateData(key, value) {
+            const keys = key.split('.');
+            let obj = appData;
+            for (let i = 0; i < keys.length - 1; i++) {
+                obj = obj[keys[i]];
+            }
+            obj[keys[keys.length - 1]] = value;
+        }
+
+        function updateChairman'sContent() {
+            const content = document.getElementById('chairmanContent').value.split('\n').filter(line => line.trim());
+            appData.chairman.content = content;
+        }
+
+        // 保存所有数据
+        async function saveAllData() {
+            try {
+                // 创建下载链接
+                const dataStr = JSON.stringify(appData, null, 4);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                showAlert('数据已导出为 data.json 文件！请用此文件替换网站目录中的 data.json，然后刷新网站。', 'success');
+            } catch (e) {
+                showAlert('保存失败: ' + e.message, 'error');
+            }
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`panel-${tabName}`).classList.add('active');
+        }
+
+        // 显示提示
+        function showAlert(msg, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = msg;
+            alert.className = `alert ${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 5000);
+        }
+
+        // 初始化
+        loadData();
+    </script>
+</body>
+</html>

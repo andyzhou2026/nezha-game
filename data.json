@@ -1,0 +1,117 @@
+{
+    "settings": {
+        "siteName": "哈萨克斯坦广东商会",
+        "siteNameEn": "Guangdong Chamber of Commerce in Kazakhstan",
+        "siteNameShort": "GDCCK",
+        "email": "info@gdcck.kz",
+        "phone": "+7 727 123 4567",
+        "address": "哈萨克斯坦阿拉木图市阿拜大道128号",
+        "addressCn": "中国广州代表处：天河区珠江新城",
+        "addressBj": "中国北京代表处：朝阳区建国门外"
+    },
+    "stats": {
+        "members": 268,
+        "years": 15,
+        "trade": 86,
+        "projects": 1580
+    },
+    "chairman": {
+        "name": "洪国权",
+        "title": "中亚广东总商会执行会长",
+        "title2": "哈萨克斯坦广东商会名誉会长",
+        "content": [
+            "尊敬的各位会员、企业家朋友们：",
+            "首先代表哈萨克斯坦广东商会，向长期以来关心支持商会发展的各级领导、社会各界人士表示衷心的感谢！向商会全体会员致以诚挚的问候！",
+            "哈萨克斯坦是\"一带一路\"倡议的重要节点国家，也是连接中国与欧洲的重要枢纽。商会自成立以来，始终秉承\"服务会员、服务社会、服务政府\"的宗旨，积极推动粤哈两地企业深化经贸合作。",
+            "当前，中哈两国关系迈入新阶段，贸易额持续增长，合作领域不断拓宽。商会将继续发挥桥梁纽带作用，为会员企业开拓哈萨克斯坦市场提供优质服务，为促进粤哈经贸合作贡献力量。",
+            "诚邀各界朋友莅临指导、洽谈合作，携手共创美好未来！"
+        ],
+        "date": "2026年3月"
+    },
+    "services": [
+        {"title": "会员服务", "desc": "会员企业享有商务对接、法律咨询、市场信息等全方位服务", "icon": "users"},
+        {"title": "商务对接", "desc": "组织商务考察、贸易洽谈、项目对接等活动", "icon": "handshake"},
+        {"title": "展览展会", "desc": "组织企业参加中哈两国重要展会，拓展市场渠道", "icon": "building"},
+        {"title": "市场推广", "desc": "提供品牌推广、市场营销、媒体宣传等服务", "icon": "bullhorn"},
+        {"title": "法律咨询", "desc": "提供中哈两国法律法规咨询和纠纷调解服务", "icon": "balance-scale"},
+        {"title": "培训交流", "desc": "组织商务培训、文化交流、人才对接等活动", "icon": "graduation-cap"}
+    ],
+    "news": [
+        {
+            "id": 1,
+            "title": "哈萨克斯坦中国国际经济发展中心代表团访问中亚广东总商会",
+            "category": "商会活动",
+            "date": "2026-03-15",
+            "excerpt": "哈萨克斯坦中国国际经济发展中心主席宋建林一行访问中亚广东总商会，双方签署《战略合作框架协议》，共同推动中国-中亚经贸合作...",
+            "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=500&fit=crop",
+            "link": ""
+        },
+        {
+            "id": 2,
+            "title": "上海市工商联与哈萨克斯坦阿拉木图投资推广中心深化合作",
+            "category": "经贸合作",
+            "date": "2026-03-12",
+            "excerpt": "",
+            "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop",
+            "link": ""
+        },
+        {
+            "id": 3,
+            "title": "G4城市经济特区在阿拉木图州成立 吸引国际投资",
+            "category": "投资动态",
+            "date": "2026-03-08",
+            "excerpt": "",
+            "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
+            "link": ""
+        },
+        {
+            "id": 4,
+            "title": "深圳市商务局举办\"阿拉木图——中亚之钥\"投资推介会",
+            "category": "商务考察",
+            "date": "2026-02-28",
+            "excerpt": "",
+            "image": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&h=400&fit=crop",
+            "link": ""
+        },
+        {
+            "id": 5,
+            "title": "中哈合作深化：广东与哈萨克斯坦贸易额年增37%",
+            "category": "贸易数据",
+            "date": "2026-02-20",
+            "excerpt": "",
+            "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
+            "link": ""
+        }
+    ],
+    "partners": [
+        {"name": "广东省商务厅", "icon": "university"},
+        {"name": "哈萨克斯坦投资局", "icon": "building-columns"},
+        {"name": "阿拉木图市政府", "icon": "globe"},
+        {"name": "哈萨克斯坦中国总商会", "icon": "handshake"},
+        {"name": "广东省贸促会", "icon": "network-wired"},
+        {"name": "阿斯塔纳航空", "icon": "plane"},
+        {"name": "中欧班列", "icon": "box"},
+        {"name": "阿里巴巴国际站", "icon": "shopping-cart"},
+        {"name": "中国国际商会", "icon": "briefcase"},
+        {"name": "哈萨克斯坦贸易政策发展中心", "icon": "map"},
+        {"name": "广东省进出口商会", "icon": "file-contract"},
+        {"name": "一带一路服务中心", "icon": "share-alt"}
+    ],
+    "members": [
+        {"name": "中亚粤商集团", "industry": "制造业 · 能源投资", "icon": "industry"},
+        {"name": "欧亚物流", "industry": "跨境物流 · 仓储", "icon": "truck"},
+        {"name": "阿里郎商城", "industry": "跨境电商 · 零售", "icon": "shopping-bag"},
+        {"name": "建设集团", "industry": "工程建设 · 地产", "icon": "hard-hat"},
+        {"name": "绿色农业", "industry": "农产品 · 食品加工", "icon": "leaf"},
+        {"name": "丝路科技", "industry": "信息技术 · 数字化", "icon": "laptop-code"},
+        {"name": "丝路金融", "industry": "金融服务 · 投资", "icon": "coins"},
+        {"name": "粤菜餐厅", "industry": "餐饮连锁 · 食品", "icon": "utensils"}
+    ],
+    "gallery": [
+        {"title": "年度会员大会", "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop"},
+        {"title": "商务考察", "image": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=300&fit=crop"},
+        {"title": "展会交流", "image": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=300&fit=crop"},
+        {"title": "签约仪式", "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop"},
+        {"title": "交流晚宴", "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop"}
+    ]
+}

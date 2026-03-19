@@ -1,576 +1,684 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>哪吒·天命逆转 — 官方主页</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background:#0a0a0f;
-  color:#fff;
-  font-family:'Microsoft YaHei','Noto Serif SC',sans-serif;
-  overflow-x:hidden;
-  min-height:100vh;
-}
-
-/* 粒子背景 */
-#bgCanvas {
-  position:fixed; top:0; left:0;
-  width:100%; height:100%;
-  pointer-events:none; z-index:0;
-}
-
-/* 底部火焰 */
-#flameCanvas {
-  position:fixed; bottom:0; left:0;
-  width:100%; height:180px;
-  pointer-events:none; z-index:0; opacity:0.45;
-}
-
-/* 导航 */
-nav {
-  position:fixed; top:0; left:0; right:0; z-index:100;
-  padding:1.2rem 3rem;
-  display:flex; justify-content:space-between; align-items:center;
-  background:linear-gradient(to bottom,rgba(10,10,15,0.95),transparent);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-.nav-logo {
-  font-size:1.4rem; font-weight:900;
-  background:linear-gradient(135deg,#ffd700,#ff6a00);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text; letter-spacing:.1em;
-}
-.nav-links { display:flex; gap:2rem; list-style:none; }
-.nav-links a {
-  color:rgba(255,255,255,0.6); text-decoration:none;
-  font-size:.85rem; letter-spacing:.15em; transition:color .3s;
-}
-.nav-links a:hover { color:#ffd700; }
-
-/* HERO */
-.hero {
-  position:relative; min-height:100vh;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; z-index:1; overflow:hidden;
-  padding:6rem 2rem 4rem;
-}
-.hero::before {
-  content:'';
-  position:absolute; inset:0;
-  background:radial-gradient(ellipse at 50% 55%,rgba(232,0,45,0.22) 0%,transparent 65%),
-              radial-gradient(ellipse at 15% 85%,rgba(255,106,0,0.12) 0%,transparent 50%);
-}
-
-/* 大字背景 */
-.hero-bg-text {
-  position:absolute; font-size:30vw; font-weight:900;
-  color:rgba(255,255,255,0.025); pointer-events:none;
-  letter-spacing:-.05em; user-select:none;
-  animation:bgPulse 4s ease-in-out infinite;
-}
-@keyframes bgPulse {
-  0%,100%{opacity:.025;transform:scale(1)}
-  50%{opacity:.055;transform:scale(1.02)}
-}
-
-/* 火焰环 */
-.fire-ring {
-  position:absolute; width:520px; height:520px;
-  border-radius:50%; border:2px solid rgba(255,106,0,0.25);
-  animation:ringRotate 10s linear infinite;
-  pointer-events:none;
-}
-.fire-ring::before {
-  content:''; position:absolute; inset:22px;
-  border-radius:50%; border:1px solid rgba(232,0,45,0.18);
-}
-.fire-ring::after {
-  content:''; position:absolute; inset:-22px;
-  border-radius:50%; border:1px dashed rgba(255,215,0,0.12);
-}
-@keyframes ringRotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-
-/* 标题区 */
-.hero-logo { position:relative; z-index:2; }
-.hero-subtitle {
-  font-size:.95rem; letter-spacing:.8em; color:rgba(255,215,0,0.75);
-  text-transform:uppercase; margin-bottom:1rem;
-  animation:fadeUp 1s ease .3s both;
-}
-.hero-title {
-  font-size:clamp(4.5rem,13vw,10rem); font-weight:900; line-height:1;
-  background:linear-gradient(135deg,#fff 0%,#ffd700 35%,#ff6a00 65%,#e8002d 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  animation:fadeUp 1s ease .5s both;
-  position:relative;
-}
-.hero-title::after {
-  content:'哪吒'; position:absolute; inset:0;
-  background:linear-gradient(135deg,#fff 0%,#ffd700 35%,#ff6a00 65%,#e8002d 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  filter:blur(22px); opacity:.4;
-  animation:glowPulse 2s ease-in-out infinite;
-}
-@keyframes glowPulse { 0%,100%{opacity:.25} 50%{opacity:.6} }
-
-.hero-en {
-  font-size:clamp(1rem,2.5vw,1.8rem); letter-spacing:.35em;
-  color:rgba(255,255,255,0.45); margin-top:.5rem;
-  animation:fadeUp 1s ease .7s both;
-}
-.hero-tagline {
-  margin-top:1.8rem; font-size:clamp(1rem,2.2vw,1.4rem);
-  color:rgba(255,215,0,0.9); letter-spacing:.2em;
-  animation:fadeUp 1s ease .9s both;
-}
-
-@keyframes fadeUp {
-  from{opacity:0;transform:translateY(24px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* 入口卡片区 */
-.cards-row {
-  position:relative; z-index:2;
-  display:flex; gap:2.5rem; flex-wrap:wrap; justify-content:center;
-  margin-top:3.5rem;
-  animation:fadeUp 1s ease 1.1s both;
-}
-
-.entry-card {
-  width:300px;
-  background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px; padding:2.2rem 2rem 2rem;
-  cursor:pointer; text-decoration:none; color:inherit;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
-  transition:all .4s; position:relative; overflow:hidden;
-}
-.entry-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  background:var(--card-grd);
-  transition:height .3s;
-}
-.entry-card:hover {
-  transform:translateY(-8px);
-  border-color:rgba(255,215,0,0.25);
-  box-shadow:0 25px 70px rgba(0,0,0,0.5), 0 0 40px var(--card-glow,rgba(232,0,45,0.15));
-}
-.entry-card:hover::before { height:4px; }
-
-.card-icon {
-  font-size:3.5rem; margin-bottom:1.2rem;
-  filter:drop-shadow(0 0 12px var(--card-shadow,rgba(255,106,0,0.5)));
-  animation:iconFloat 3s ease-in-out infinite;
-}
-@keyframes iconFloat {
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-
-.card-tag {
-  font-size:.7rem; letter-spacing:.4em; text-transform:uppercase;
-  color:var(--card-accent,#ff6a00); margin-bottom:.6rem;
-}
-.card-title {
-  font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:.8rem;
-}
-.card-desc {
-  font-size:.85rem; color:rgba(255,255,255,0.5);
-  line-height:1.75; margin-bottom:1.5rem;
-}
-.card-btn {
-  padding:.6rem 1.8rem; border:1px solid var(--card-accent,#ff6a00);
-  border-radius:2px; font-size:.85rem; letter-spacing:.15em;
-  color:var(--card-accent,#ff6a00); background:transparent;
-  transition:all .3s; font-family:inherit; cursor:pointer;
-}
-.entry-card:hover .card-btn {
-  background:var(--card-accent,#ff6a00);
-  color:#fff; box-shadow:0 0 20px var(--card-glow,rgba(255,106,0,0.4));
-}
-
-/* 向下滚动提示 */
-.scroll-hint {
-  position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
-  animation:bounce 2.2s ease-in-out infinite; z-index:2;
-  color:rgba(255,255,255,0.35); font-size:.75rem; letter-spacing:.2em;
-  display:flex; flex-direction:column; align-items:center; gap:.5rem;
-}
-.scroll-arrow {
-  width:1px; height:38px;
-  background:linear-gradient(to bottom,transparent,rgba(255,215,0,0.55));
-}
-@keyframes bounce {
-  0%,100%{transform:translateX(-50%) translateY(0)}
-  50%{transform:translateX(-50%) translateY(8px)}
-}
-
-/* 关于 section */
-.about-sec {
-  position:relative; z-index:1;
-  max-width:900px; margin:0 auto; padding:6rem 2rem;
-  text-align:center;
-}
-.sec-label {
-  font-size:.75rem; letter-spacing:.5em; color:#ff6a00;
-  text-transform:uppercase; margin-bottom:.8rem;
-}
-.sec-title {
-  font-size:clamp(1.8rem,4vw,3rem); font-weight:900; margin-bottom:1rem;
-  background:linear-gradient(135deg,#fff,#ffd700);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.sec-divider {
-  width:80px; height:3px; margin:.5rem auto 2.5rem;
-  background:linear-gradient(90deg,#e8002d,#ff6a00);
-}
-.about-text {
-  font-size:1.05rem; color:rgba(255,255,255,0.65);
-  line-height:2; letter-spacing:.05em; text-align:justify;
-}
-
-/* 特性列表 */
-.features {
-  position:relative; z-index:1;
-  max-width:1100px; margin:0 auto; padding:0 2rem 6rem;
-}
-.features-grid {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:1.5rem; margin-top:2rem;
-}
-.feat-item {
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.07);
-  border-radius:6px; padding:1.8rem 1.5rem;
-  transition:all .35s;
-  opacity:0; transform:translateY(20px);
-  transition:opacity .6s ease, transform .6s ease, background .3s, border .3s;
-}
-.feat-item.visible {
-  opacity:1; transform:translateY(0);
-}
-.feat-item:hover {
-  background:rgba(232,0,45,0.07);
-  border-color:rgba(232,0,45,0.25);
-  transform:translateY(-4px);
-}
-.feat-icon { font-size:2rem; margin-bottom:.8rem; display:block; }
-.feat-name { font-size:1rem; color:#ffd700; margin-bottom:.5rem; font-weight:700; }
-.feat-desc { font-size:.82rem; color:rgba(255,255,255,0.5); line-height:1.7; }
-
-/* 分隔线 */
-.sep {
-  width:100%; height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,106,0,0.25),transparent);
-  position:relative; z-index:1;
-}
-
-/* Footer */
-footer {
-  position:relative; z-index:1; text-align:center;
-  padding:3rem 2rem;
-  border-top:1px solid rgba(255,255,255,0.06);
-  color:rgba(255,255,255,0.3); font-size:.85rem; letter-spacing:.1em;
-}
-footer span { color:#ff6a00; }
-footer .footer-links {
-  display:flex; gap:2rem; justify-content:center; margin-bottom:1.5rem;
-  list-style:none; flex-wrap:wrap;
-}
-footer .footer-links a {
-  color:rgba(255,255,255,0.4); text-decoration:none;
-  font-size:.82rem; letter-spacing:.1em; transition:color .3s;
-}
-footer .footer-links a:hover { color:#ffd700; }
-
-/* 响应式 */
-@media(max-width:768px){
-  nav { padding:1rem 1.5rem; }
-  .nav-links { display:none; }
-  .fire-ring { width:280px; height:280px; }
-  .cards-row { flex-direction:column; align-items:center; }
-  .entry-card { width:100%; max-width:340px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>哈萨克斯坦广东商会 | Guangdong Chamber of Commerce in Kazakhstan</title>
+    <meta name="description" content="哈萨克斯坦广东商会 - 连接中国广东与哈萨克斯坦的经贸桥梁，促进两国企业合作与交流">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- 顶部导航栏 -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="logo-text-zh">GDCCK</span>
+                    </div>
+                    <div class="logo-text">
+                        <span class="zh-text">哈萨克斯坦广东商会</span>
+                        <span class="en-text">Guangdong Chamber of Commerce in Kazakhstan</span>
+                    </div>
+                </div>
+                <nav class="nav" id="nav">
+                    <a href="#home" class="nav-link" data-i18n="nav.home">首页</a>
+                    <a href="#about" class="nav-link" data-i18n="nav.about">关于我们</a>
+                    <a href="#services" class="nav-link" data-i18n="nav.services">商会服务</a>
+                    <a href="#news" class="nav-link" data-i18n="nav.news">新闻动态</a>
+                    <a href="#members" class="nav-link" data-i18n="nav.members">会员企业</a>
+                    <a href="#contact" class="nav-link" data-i18n="nav.contact">联系我们</a>
+                </nav>
+                <div class="header-right">
+                    <div class="language-switch">
+                        <button class="lang-btn" id="langBtn">
+                            <i class="fas fa-globe"></i>
+                            <span id="currentLang">中文</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="lang-dropdown" id="langDropdown">
+                            <div class="lang-group">🇨🇳 中文</div>
+                            <button class="lang-option" data-lang="zh">中文</button>
+                            <button class="lang-option" data-lang="en">English</button>
+                            <div class="lang-divider"></div>
+                            <div class="lang-group">🌍 Central Asia</div>
+                            <button class="lang-option" data-lang="kk">Қазақша (哈萨克语)</button>
+                            <button class="lang-option" data-lang="ky">Кыргызча (吉尔吉斯语)</button>
+                            <button class="lang-option" data-lang="uz">O'zbekcha (乌兹别克语)</button>
+                            <button class="lang-option" data-lang="tk">Türkmençe (土库曼语)</button>
+                            <button class="lang-option" data-lang="tg">Тоҷикӣ (塔吉克语)</button>
+                            <div class="lang-divider"></div>
+                            <div class="lang-group">🇷🇺 Русский</div>
+                            <button class="lang-option" data-lang="ru">Русский</button>
+                        </div>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<canvas id="bgCanvas"></canvas>
-<canvas id="flameCanvas"></canvas>
+    <!-- Hero区域 -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <div class="hero-badge" data-i18n="hero.badge">连接中国·走向世界</div>
+            <h1 class="hero-title">
+                <span class="title-line" data-i18n="hero.title1">哈萨克斯坦广东商会</span>
+                <span class="title-line" data-i18n="hero.title2">Guangdong Chamber of Commerce in Kazakhstan</span>
+            </h1>
+            <p class="hero-desc" data-i18n="hero.desc">促进广东与哈萨克斯坦经贸合作，打造"一带一路"标杆商会</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary" data-i18n="hero.join">加入我们</a>
+                <a href="#about" class="btn btn-outline" data-i18n="hero.learnMore">了解更多</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span data-i18n="hero.scroll">向下滚动</span>
+            <div class="scroll-indicator">
+                <div class="scroll-dot"></div>
+            </div>
+        </div>
+    </section>
 
-<!-- 导航 -->
-<nav>
-  <div class="nav-logo">哪吒·天命逆转</div>
-  <ul class="nav-links">
-    <li><a href="#about">关于</a></li>
-    <li><a href="nezha_anime.html">动漫企划</a></li>
-    <li><a href="nezha_game.html">开始游戏</a></li>
-  </ul>
-</nav>
+    <!-- 数据统计 -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="268" style="opacity:1;transform:none;">268</div>
+                    <div class="stat-unit">+</div>
+                    <div class="stat-label" data-i18n="stats.member">会员企业</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="15" style="opacity:1;transform:none;">15</div>
+                    <div class="stat-unit">年</div>
+                    <div class="stat-label" data-i18n="stats.year">成立历程</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="86" style="opacity:1;transform:none;">86</div>
+                    <div class="stat-unit">亿$</div>
+                    <div class="stat-label" data-i18n="stats.trade">年贸易额</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="1580" style="opacity:1;transform:none;">1580</div>
+                    <div class="stat-unit">+</div>
+                    <div class="stat-label" data-i18n="stats.project">合作项目</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-bg-text">哪吒</div>
-  <div class="fire-ring"></div>
+    <!-- 会长致辞 -->
+    <section class="chairman">
+        <div class="container">
+            <div class="chairman-grid">
+                <div class="chairman-image">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=650&fit=crop" alt="商会会长">
+                        <div class="image-frame"></div>
+                    </div>
+                    <div class="chairman-info">
+                        <h4>洪国权</h4>
+                        <p>中亚广东总商会执行会长</p>
+                        <p>哈萨克斯坦广东商会名誉会长</p>
+                    </div>
+                </div>
+                <div class="chairman-content">
+                    <span class="section-tag" data-i18n="chairman.tag">会长致辞</span>
+                    <h2 class="section-title" data-i18n="chairman.title">携手共创 · 合作共赢</h2>
+                    <div class="chairman-text">
+                        <p data-i18n="chairman.text1">尊敬的各位会员、企业家朋友们：</p>
+                        <p data-i18n="chairman.text2">首先代表哈萨克斯坦广东商会，向长期以来关心支持商会发展的各级领导、社会各界人士表示衷心的感谢！向商会全体会员致以诚挚的问候！</p>
+                        <p data-i18n="chairman.text3">哈萨克斯坦是"一带一路"倡议的重要节点国家，也是连接中国与欧洲的重要枢纽。商会自成立以来，始终秉承"服务会员、服务社会、服务政府"的宗旨，积极推动粤哈两地企业深化经贸合作。</p>
+                        <p data-i18n="chairman.text4">当前，中哈两国关系迈入新阶段，贸易额持续增长，合作领域不断拓宽。商会将继续发挥桥梁纽带作用，为会员企业开拓哈萨克斯坦市场提供优质服务，为促进粤哈经贸合作贡献力量。</p>
+                        <p data-i18n="chairman.text5">诚邀各界朋友莅临指导、洽谈合作，携手共创美好未来！</p>
+                    </div>
+                    <div class="chairman-sign">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Signature_sample.svg/300px-Signature_sample.svg.png" alt="签名">
+                        <span>2026年3月</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <div class="hero-logo">
-    <p class="hero-subtitle">2026 · 原创 IP 企划</p>
-    <h1 class="hero-title">哪吒</h1>
-    <p class="hero-en">NEZHA · FATE REVERSED</p>
-    <p class="hero-tagline">「我命由我不由天」</p>
-  </div>
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="about.tag">关于我们</span>
+                <h2 class="section-title" data-i18n="about.title">关于哈萨克斯坦广东商会</h2>
+                <p class="section-desc" data-i18n="about.desc">连接粤哈两地企业，共创繁荣未来</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-content">
+                    <div class="about-text">
+                        <p data-i18n="about.text1">哈萨克斯坦广东商会（Guangdong Chamber of Commerce in Kazakhstan，简称GDCCK）成立于2011年，是经哈萨克斯坦政府批准的非营利性国际商务组织。</p>
+                        <p data-i18n="about.text2">商会总部位于哈萨克斯坦最大城市阿拉木图，在北京、广州、乌鲁木齐设有代表处。十五年来，我们始终致力于促进广东与哈萨克斯坦两国企业间的经贸合作与交流，为会员企业提供全方位的商务服务。</p>
+                        <p data-i18n="about.text3">作为"一带一路"倡议的重要参与者，商会积极推动粤哈两地在能源、制造业、基础设施建设、数字经济等领域的深度合作，已成为中哈经贸合作的重要桥梁和纽带。2024年粤哈贸易额增长37%，创历史新高。</p>
+                    </div>
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                            <div class="feature-text">
+                                <h4 data-i18n="about.feature1.title">商务对接</h4>
+                                <p data-i18n="about.feature1.desc">精准匹配商机</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="feature-text">
+                                <h4 data-i18n="about.feature2.title">法律援助</h4>
+                                <p data-i18n="about.feature2.desc">专业法律支持</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="feature-text">
+                                <h4 data-i18n="about.feature3.title">市场咨询</h4>
+                                <p data-i18n="about.feature3.desc">深度行业分析</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1569974507005-6dc61f97fb5c?w=600&h=800&fit=crop" alt="哈萨克斯坦阿拉木图">
+                        <div class="image-overlay"></div>
+                        <div class="image-accent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- 入口卡片 -->
-  <div class="cards-row">
+    <!-- 核心服务 -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="services.tag">商会服务</span>
+                <h2 class="section-title" data-i18n="services.title">全方位服务体系</h2>
+                <p class="section-desc" data-i18n="services.desc">专注、专业、专心的商务服务</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s1.title">会员服务</h3>
+                    <p class="service-desc" data-i18n="services.s1.desc">会员企业享有商务对接、法律咨询、市场信息等全方位服务</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s2.title">商务对接</h3>
+                    <p class="service-desc" data-i18n="services.s2.desc">组织商务考察、贸易洽谈、项目对接等活动</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s3.title">展览展会</h3>
+                    <p class="service-desc" data-i18n="services.s3.desc">组织企业参加中哈两国重要展会，拓展市场渠道</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s4.title">市场推广</h3>
+                    <p class="service-desc" data-i18n="services.s4.desc">提供品牌推广、市场营销、媒体宣传等服务</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s5.title">法律咨询</h3>
+                    <p class="service-desc" data-i18n="services.s5.desc">提供中哈两国法律法规咨询和纠纷调解服务</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="service-title" data-i18n="services.s6.title">培训交流</h3>
+                    <p class="service-desc" data-i18n="services.s6.desc">组织商务培训、文化交流、人才对接等活动</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- 动漫企划 -->
-    <a class="entry-card" href="nezha_anime.html"
-      style="--card-grd:linear-gradient(90deg,#e8002d,#ff6a00);
-             --card-accent:#ff6a00;
-             --card-glow:rgba(255,106,0,0.2);
-             --card-shadow:rgba(255,106,0,0.6);">
-      <span class="card-icon">📖</span>
-      <p class="card-tag">Anime Project</p>
-      <h2 class="card-title">动漫企划</h2>
-      <p class="card-desc">深入探索《哪吒·天命逆转》的世界观、角色设定与十二章故事大纲。</p>
-      <div class="card-btn">探索世界 →</div>
-    </a>
+    <!-- 投资环境 -->
+    <section class="environment">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag" data-i18n="env.tag">投资环境</span>
+                <h2 class="section-title" data-i18n="env.title">哈萨克斯坦投资优势</h2>
+                <p class="section-desc" data-i18n="env.desc">走进中亚最大市场，把握"一带一路"历史机遇</p>
+            </div>
+            <div class="env-grid">
+                <div class="env-card">
+                    <div class="env-number">01</div>
+                    <h3 class="env-title" data-i18n="env.e1.title">战略位置</h3>
+                    <p class="env-desc" data-i18n="env.e1.desc">位于欧亚大陆中心，是连接中国与欧洲的重要枢纽</p>
+                </div>
+                <div class="env-card">
+                    <div class="env-number">02</div>
+                    <h3 class="env-title" data-i18n="env.e2.title">丰富资源</h3>
+                    <p class="env-desc" data-i18n="env.e2.desc">拥有丰富的石油、天然气、矿产等自然资源</p>
+                </div>
+                <div class="env-card">
+                    <div class="env-number">03</div>
+                    <h3 class="env-title" data-i18n="env.e3.title">政策优惠</h3>
+                    <p class="env-desc" data-i18n="env.e3.desc">政府提供税收优惠、土地优惠等投资激励机制</p>
+                </div>
+                <div class="env-card">
+                    <div class="env-number">04</div>
+                    <h3 class="env-title" data-i18n="env.e4.title">市场潜力</h3>
+                    <p class="env-desc" data-i18n="env.e4.desc">1900万人口，消费市场快速增长，城镇化进程加速</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- 游戏 -->
-    <a class="entry-card" href="nezha_game.html"
-      style="--card-grd:linear-gradient(90deg,#9900ff,#e8002d);
-             --card-accent:#cc00ff;
-             --card-glow:rgba(153,0,255,0.2);
-             --card-shadow:rgba(153,0,255,0.6);">
-      <span class="card-icon" style="animation-delay:.5s">🎮</span>
-      <p class="card-tag" style="color:#cc00ff">Action Game</p>
-      <h2 class="card-title">天命逆转</h2>
-      <p class="card-desc">横版动作游戏，操控哪吒使用火尖枪、混天绫、风火轮，闯过5波天庭天兵！</p>
-      <div class="card-btn" style="border-color:#cc00ff;color:#cc00ff">立即游玩 →</div>
-    </a>
+    <!-- 新闻动态 -->
+    <section class="news" id="news">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="news.tag">新闻动态</span>
+                <h2 class="section-title" data-i18n="news.title">最新资讯</h2>
+                <p class="section-desc" data-i18n="news.desc">了解商会动态，把握行业先机</p>
+            </div>
+            <div class="news-grid">
+                <article class="news-card news-featured">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=500&fit=crop" alt="新闻图片">
+                        <div class="news-category" data-i18n="news.cat1">商会活动</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-date">2026-03-15</span>
+                        </div>
+                        <h3 class="news-title" data-i18n="news.n1.title">哈萨克斯坦中国国际经济发展中心代表团访问中亚广东总商会</h3>
+                        <p class="news-excerpt" data-i18n="news.n1.desc">哈萨克斯坦中国国际经济发展中心主席宋建林一行访问中亚广东总商会，双方签署《战略合作框架协议》，共同推动中国-中亚经贸合作...</p>
+                        <a href="#" class="news-link" data-i18n="news.readMore">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop" alt="新闻图片">
+                        <div class="news-category" data-i18n="news.cat2">经贸合作</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-date">2026-03-12</span>
+                        </div>
+                        <h3 class="news-title" data-i18n="news.n2.title">上海市工商联与哈萨克斯坦阿拉木图投资推广中心深化合作</h3>
+                        <a href="#" class="news-link" data-i18n="news.readMore">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop" alt="新闻图片">
+                        <div class="news-category" data-i18n="news.cat3">投资动态</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-date">2026-03-08</span>
+                        </div>
+                        <h3 class="news-title" data-i18n="news.n3.title">G4城市经济特区在阿拉木图州成立 吸引国际投资</h3>
+                        <a href="#" class="news-link" data-i18n="news.readMore">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&h=400&fit=crop" alt="新闻图片">
+                        <div class="news-category" data-i18n="news.cat4">商务考察</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-date">2026-02-28</span>
+                        </div>
+                        <h3 class="news-title" data-i18n="news.n4.title">深圳市商务局举办"阿拉木图——中亚之钥"投资推介会</h3>
+                        <a href="#" class="news-link" data-i18n="news.readMore">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" alt="新闻图片">
+                        <div class="news-category" data-i18n="news.cat5">贸易数据</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-date">2026-02-20</span>
+                        </div>
+                        <h3 class="news-title" data-i18n="news.n5.title">中哈合作深化：广东与哈萨克斯坦贸易额年增37%</h3>
+                        <a href="#" class="news-link" data-i18n="news.readMore">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
 
-  </div>
+    <!-- 会员企业 -->
+    <section class="members" id="members">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="members.tag">会员企业</span>
+                <h2 class="section-title" data-i18n="members.title">优秀会员企业</h2>
+                <p class="section-desc" data-i18n="members.desc">携手优秀企业，共创商业未来</p>
+            </div>
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h4>中亚粤商集团</h4>
+                    <p>制造业 · 能源投资</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h4>欧亚物流</h4>
+                    <p>跨境物流 · 仓储</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h4>阿里郎商城</h4>
+                    <p>跨境电商 · 零售</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h4>建设集团</h4>
+                    <p>工程建设 · 地产</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4>绿色农业</h4>
+                    <p>农产品 · 食品加工</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h4>丝路科技</h4>
+                    <p>信息技术 · 数字化</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h4>丝路金融</h4>
+                    <p>金融服务 · 投资</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-logo">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h4>粤菜餐厅</h4>
+                    <p>餐饮连锁 · 食品</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <div class="scroll-hint">
-    <span>向下探索</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</div>
+    <!-- 合作伙伴 -->
+    <section class="partners">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="partners.tag">合作伙伴</span>
+                <h2 class="section-title" data-i18n="partners.title">战略合作伙伴</h2>
+            </div>
+            <div class="partners-grid">
+                <div class="partner-logo">
+                    <i class="fas fa-university"></i>
+                    <span>广东省商务厅</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-building-columns"></i>
+                    <span>哈萨克斯坦投资局</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-globe"></i>
+                    <span>阿拉木图市政府</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-handshake"></i>
+                    <span>哈萨克斯坦中国总商会</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-network-wired"></i>
+                    <span>广东省贸促会</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-plane"></i>
+                    <span>阿斯塔纳航空</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-box"></i>
+                    <span>中欧班列</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>阿里巴巴国际站</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-briefcase"></i>
+                    <span>中国国际商会</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-map"></i>
+                    <span>哈萨克斯坦贸易政策发展中心</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-file-contract"></i>
+                    <span>广东省进出口商会</span>
+                </div>
+                <div class="partner-logo">
+                    <i class="fas fa-share-alt"></i>
+                    <span>一带一路服务中心</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="sep"></div>
+    <!-- 活动相册 -->
+    <section class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="gallery.tag">活动相册</span>
+                <h2 class="section-title" data-i18n="gallery.title">商会活动</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-large">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop" alt="商务活动">
+                    <div class="gallery-overlay">
+                        <span>年度会员大会</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=300&fit=crop" alt="商务活动">
+                    <div class="gallery-overlay">
+                        <span>商务考察</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=300&fit=crop" alt="商务活动">
+                    <div class="gallery-overlay">
+                        <span>展会交流</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop" alt="商务活动">
+                    <div class="gallery-overlay">
+                        <span>签约仪式</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop" alt="商务活动">
+                    <div class="gallery-overlay">
+                        <span>交流晚宴</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- 关于 -->
-<section class="about-sec" id="about">
-  <p class="sec-label">About</p>
-  <h2 class="sec-title">关于本企划</h2>
-  <div class="sec-divider"></div>
-  <p class="about-text">
-    《哪吒·天命逆转》是一个以中国神话为基础的原创 IP 企划，以"我命由我不由天"为核心主题，
-    构建了一个融合神魔世界观的故事宇宙。本企划包含完整的动漫剧本大纲与角色体系，
-    同时开发了配套横版动作游戏，让玩家亲身体验哪吒逆天改命的热血历程。
-    <br><br>
-    魔丸转世的少年，从未向命运低头。混沌之力在他体内奔腾，天庭的枷锁束缚不了一颗自由的心。
-    这是属于每一个敢于抗争者的故事——你，就是那个逆天的哪吒。
-  </p>
-</section>
+    <!-- 联系我们 -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag" data-i18n="contact.tag">联系我们</span>
+                <h2 class="section-title" data-i18n="contact.title">联系我们</h2>
+                <p class="section-desc" data-i18n="contact.desc">期待与您的合作</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h4 data-i18n="contact.address">商会地址</h4>
+                            <p data-i18n="contact.addressText">哈萨克斯坦阿拉木图市阿拜大道128号</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h4 data-i18n="contact.phone">联系电话</h4>
+                            <p>+7 727 123 4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h4 data-i18n="contact.email">电子邮箱</h4>
+                            <p>info@gdcck.kz</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h4 data-i18n="contact.hours">工作时间</h4>
+                            <p data-i18n="contact.hoursText">周一至周五 9:00-18:00</p>
+                        </div>
+                    </div>
+                    <div class="contact-qr">
+                        <h4 data-i18n="contact.wechat">关注商会公众号</h4>
+                        <div class="qr-code">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contactForm">
+                        <h3 class="form-title" data-i18n="contact.formTitle">在线留言</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" name="name" required placeholder=" ">
+                                <label data-i18n="contact.name">姓名</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" required placeholder=" ">
+                                <label data-i18n="contact.email2">邮箱</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="phone" placeholder=" ">
+                            <label data-i18n="contact.phone2">电话</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" required placeholder=" " rows="4"></textarea>
+                            <label data-i18n="contact.message">留言内容</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" data-i18n="contact.submit">提交留言</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="sep"></div>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-about">
+                        <div class="footer-logo">
+                            <span class="logo-text-zh">GDCCK</span>
+                        </div>
+                        <p data-i18n="footer.about">哈萨克斯坦广东商会是连接中国广东与哈萨克斯坦的经贸桥梁，致力于促进两国企业合作与交流。</p>
+                        <div class="footer-social">
+                            <a href="#"><i class="fab fa-weixin"></i></a>
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer.quickLinks">快速链接</h4>
+                        <ul>
+                            <li><a href="#about" data-i18n="nav.about">关于我们</a></li>
+                            <li><a href="#services" data-i18n="nav.services">商会服务</a></li>
+                            <li><a href="#news" data-i18n="nav.news">新闻动态</a></li>
+                            <li><a href="#members" data-i18n="nav.members">会员企业</a></li>
+                            <li><a href="#contact" data-i18n="nav.contact">联系我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer.services">服务项目</h4>
+                        <ul>
+                            <li><a href="#" data-i18n="footer.s1">会员服务</a></li>
+                            <li><a href="#" data-i18n="footer.s2">商务对接</a></li>
+                            <li><a href="#" data-i18n="footer.s3">展览展会</a></li>
+                            <li><a href="#" data-i18n="footer.s4">法律咨询</a></li>
+                            <li><a href="#" data-i18n="footer.s5">市场推广</a></li>
+                            <li><a href="#" data-i18n="footer.s6">培训交流</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h4 data-i18n="footer.contact">联系方式</h4>
+                        <p><i class="fas fa-map-marker-alt"></i> 哈萨克斯坦阿拉木图市</p>
+                        <p><i class="fas fa-phone"></i> +7 727 123 4567</p>
+                        <p><i class="fas fa-envelope"></i> info@gdcck.kz</p>
+                        <p><i class="fas fa-map-pin"></i> 中国广州代表处：天河区珠江新城</p>
+                        <p><i class="fas fa-map-pin"></i> 中国北京代表处：朝阳区建国门外</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 哈萨克斯坦广东商会 GDCCK. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-<!-- 特性 -->
-<section class="features" id="features">
-  <p class="sec-label" style="text-align:center">Features</p>
-  <h2 class="sec-title" style="text-align:center">企划亮点</h2>
-  <div class="sec-divider"></div>
-
-  <div class="features-grid">
-    <div class="feat-item">
-      <span class="feat-icon">🌍</span>
-      <div class="feat-name">完整世界观</div>
-      <div class="feat-desc">三界格局、天命之书、法力体系全面构建，六大核心设定支撑宏大叙事。</div>
-    </div>
-    <div class="feat-item">
-      <span class="feat-icon">👥</span>
-      <div class="feat-name">鲜活角色</div>
-      <div class="feat-desc">哪吒、敖丙、李靖、申公豹——四位核心角色各有完整人物弧光与命运纠葛。</div>
-    </div>
-    <div class="feat-item">
-      <span class="feat-icon">📜</span>
-      <div class="feat-name">十二章故事</div>
-      <div class="feat-desc">从魔丸降世到逆天改命，完整的情感叙事让英雄成长之路震撼人心。</div>
-    </div>
-    <div class="feat-item">
-      <span class="feat-icon">⚔️</span>
-      <div class="feat-name">横版动作游戏</div>
-      <div class="feat-desc">5波敌人、5种技能、连击系统、魔丸爆发——在像素战场上感受"我命由我"的力量。</div>
-    </div>
-    <div class="feat-item">
-      <span class="feat-icon">🎨</span>
-      <div class="feat-name">原创视觉风格</div>
-      <div class="feat-desc">暗金火焰美学贯穿全局，粒子特效与流畅动画打造沉浸式体验。</div>
-    </div>
-    <div class="feat-item">
-      <span class="feat-icon">🏯</span>
-      <div class="feat-name">杭州君器出品</div>
-      <div class="feat-desc">杭州君器智能科技有限公司倾力打造，致力于将中国神话传说推向全球舞台。</div>
-    </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- 底部 CTA -->
-<section style="position:relative;z-index:1;text-align:center;padding:4rem 2rem;">
-  <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);font-weight:900;margin-bottom:1rem;
-    background:linear-gradient(135deg,#ffd700,#ff6a00);-webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;background-clip:text;">
-    准备好逆天改命了吗？
-  </h2>
-  <p style="color:rgba(255,255,255,0.5);margin-bottom:2.5rem;font-size:1rem;letter-spacing:.1em;">
-    选择你的方式，踏入哪吒的世界
-  </p>
-  <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
-    <a href="nezha_anime.html" style="padding:.9rem 2.8rem;background:linear-gradient(135deg,#e8002d,#ff6a00);
-      color:#fff;text-decoration:none;border-radius:2px;font-size:1rem;letter-spacing:.15em;
-      transition:all .3s;display:inline-block;"
-      onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 40px rgba(232,0,45,0.6)'"
-      onmouseout="this.style.transform='';this.style.boxShadow=''">
-      📖 动漫企划
-    </a>
-    <a href="nezha_game.html" style="padding:.9rem 2.8rem;background:linear-gradient(135deg,#9900ff,#e8002d);
-      color:#fff;text-decoration:none;border-radius:2px;font-size:1rem;letter-spacing:.15em;
-      transition:all .3s;display:inline-block;"
-      onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 40px rgba(153,0,255,0.6)'"
-      onmouseout="this.style.transform='';this.style.boxShadow=''">
-      🎮 开始游戏
-    </a>
-  </div>
-</section>
-
-<footer>
-  <ul class="footer-links">
-    <li><a href="#about">关于企划</a></li>
-    <li><a href="nezha_anime.html">动漫企划</a></li>
-    <li><a href="nezha_game.html">天命逆转游戏</a></li>
-  </ul>
-  <p>《哪吒·天命逆转》NEZHA: FATE REVERSED</p>
-  <p style="margin-top:.5rem">原创动漫 IP 企划 · <span>2026</span> · 概念设计稿</p>
-  <p style="margin-top:1.5rem;font-size:.9rem;letter-spacing:.15em;color:rgba(255,215,0,0.65)">
-    杭州君器智能科技有限公司 出品
-  </p>
-  <p style="margin-top:1rem;font-size:.75rem;opacity:.5">
-    「生而为魔，逆天改命」— 每个人都是自己命运的主人
-  </p>
-</footer>
-
-<script>
-// ===== 粒子背景 =====
-const bgCanvas = document.getElementById('bgCanvas');
-const bgCtx = bgCanvas.getContext('2d');
-let bgParticles = [];
-
-function resizeBg(){
-  bgCanvas.width = window.innerWidth;
-  bgCanvas.height = window.innerHeight;
-}
-resizeBg();
-window.addEventListener('resize', resizeBg);
-
-class BgParticle {
-  constructor(){this.reset();}
-  reset(){
-    this.x = Math.random() * bgCanvas.width;
-    this.y = Math.random() * bgCanvas.height;
-    this.size = Math.random() * 2 + 0.4;
-    this.speedX = (Math.random() - 0.5) * 0.25;
-    this.speedY = -(Math.random() * 0.45 + 0.15);
-    this.opacity = Math.random() * 0.45 + 0.08;
-    this.color = Math.random() > 0.55
-      ? `rgba(255,${Math.floor(Math.random()*90+40)},0,${this.opacity})`
-      : `rgba(255,215,0,${this.opacity * 0.6})`;
-  }
-  update(){ this.x+=this.speedX; this.y+=this.speedY; if(this.y<-8)this.reset(); }
-  draw(){
-    bgCtx.save(); bgCtx.globalAlpha=this.opacity; bgCtx.fillStyle=this.color;
-    bgCtx.beginPath(); bgCtx.arc(this.x,this.y,this.size,0,Math.PI*2); bgCtx.fill();
-    bgCtx.restore();
-  }
-}
-for(let i=0;i<130;i++) bgParticles.push(new BgParticle());
-function animBg(){
-  bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
-  bgParticles.forEach(p=>{p.update();p.draw();});
-  requestAnimationFrame(animBg);
-}
-animBg();
-
-// ===== 底部火焰 =====
-const flameCanvas = document.getElementById('flameCanvas');
-const fCtx = flameCanvas.getContext('2d');
-function resizeFlame(){ flameCanvas.width = window.innerWidth; flameCanvas.height = 180; }
-resizeFlame();
-window.addEventListener('resize', resizeFlame);
-
-let flameParticles = [];
-class FlameParticle {
-  constructor(){this.reset();}
-  reset(){
-    this.x = Math.random() * flameCanvas.width;
-    this.y = flameCanvas.height;
-    this.vx = (Math.random()-0.5)*1.8;
-    this.vy = -(Math.random()*3+1.5);
-    this.life = 1;
-    this.decay = Math.random()*0.018+0.009;
-    this.size = Math.random()*14+5;
-  }
-  update(){
-    this.x+=this.vx; this.y+=this.vy;
-    this.life-=this.decay; this.size*=0.985;
-    if(this.life<=0) this.reset();
-  }
-  draw(){
-    const g=fCtx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size);
-    g.addColorStop(0,`rgba(255,255,200,${this.life*0.9})`);
-    g.addColorStop(0.3,`rgba(255,100,0,${this.life*0.7})`);
-    g.addColorStop(0.7,`rgba(200,0,0,${this.life*0.4})`);
-    g.addColorStop(1,'transparent');
-    fCtx.save(); fCtx.globalCompositeOperation='lighter';
-    fCtx.fillStyle=g; fCtx.beginPath(); fCtx.arc(this.x,this.y,this.size,0,Math.PI*2); fCtx.fill();
-    fCtx.restore();
-  }
-}
-for(let i=0;i<90;i++){
-  const p=new FlameParticle();
-  p.y=Math.random()*flameCanvas.height;
-  flameParticles.push(p);
-}
-function animFlame(){
-  fCtx.clearRect(0,0,flameCanvas.width,flameCanvas.height);
-  flameParticles.forEach(p=>{p.update();p.draw();});
-  requestAnimationFrame(animFlame);
-}
-animFlame();
-
-// ===== 滚动进入动画 =====
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-},{threshold:0.1, rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.feat-item').forEach((el,i)=>{
-  el.style.transitionDelay = `${i*0.08}s`;
-  observer.observe(el);
-});
-
-// ===== 鼠标视差 =====
-document.addEventListener('mousemove', e=>{
-  const x=(e.clientX/window.innerWidth-0.5)*18;
-  const y=(e.clientY/window.innerHeight-0.5)*8;
-  const ring = document.querySelector('.fire-ring');
-  if(ring) ring.style.transform=`rotate(${Date.now()/10000*360}deg) translate(${x*.25}px,${y*.25}px)`;
-});
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
