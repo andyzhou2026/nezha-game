@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>万川远景 | 直播电商产教融合标杆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --accent2: #0f3460;
+            --gold: #f5a623;
+            --light: #f8f9fa;
+            --text: #2d3436;
+            --text-light: #636e72;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* 导航 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* 英雄区 */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent2) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></svg>') repeat;
+            background-size: 50px 50px;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), #f7b731);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 8vw, 72px);
+            color: #fff;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2.5vw, 22px);
+            color: rgba(255,255,255,0.7);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 证书徽章 */
+        .badge-section {
+            background: #fff;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .badge-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #f8f9fa, #fff);
+            border: 1px solid #eee;
+            border-radius: 20px;
+            padding: 30px 40px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .badge:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .badge-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .badge h4 {
+            color: var(--primary);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .badge p {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        /* 关于我们 */
+        .about {
+            padding: 100px 20px;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 5vw, 42px);
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            color: var(--text-light);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .about-card {
+            background: linear-gradient(135deg, #f8f9fa, #fff);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #eee;
+            transition: all 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .about-card h3 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-card p {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .about-card .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        /* 合作院校 */
+        .partners {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%);
+        }
+
+        .partner-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .partner-card {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            transition: all 0.4s;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+        }
+
+        .partner-header {
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent2), var(--primary));
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .partner-header.sdcy {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .partner-header.laixi {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .partner-icon {
+            font-size: 80px;
+            opacity: 0.3;
+            color: #fff;
+        }
+
+        .partner-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .partner-body {
+            padding: 30px;
+        }
+
+        .partner-body h3 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .partner-body .subtitle {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .partner-body p {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .partner-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .partner-stat {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .partner-stat strong {
+            display: block;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .partner-stat span {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* 案例展示 */
+        .cases {
+            padding: 100px 20px;
+            background: var(--primary);
+        }
+
+        .cases .section-tag {
+            background: linear-gradient(135deg, var(--gold), #f7b731);
+            color: var(--primary);
+        }
+
+        .cases .section-title {
+            color: #fff;
+        }
+
+        .cases .section-desc {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .case-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .case-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .case-image {
+            height: 220px;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .case-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .case-image-placeholder {
+            font-size: 60px;
+            opacity: 0.5;
+        }
+
+        .case-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gold);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .case-body {
+            padding: 30px;
+        }
+
+        .case-body h3 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .case-body p {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .case-metrics {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 16px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .metric strong {
+            display: block;
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .metric span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* 数据展示 */
+        .metrics-section {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, #ff6b6b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metrics-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .metric-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.3s;
+        }
+
+        .metric-box:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .metric-box .number {
+            font-size: 56px;
+            font-weight: 900;
+            color: #fff;
+            display: block;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .metric-box .label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .metric-box .desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 8px;
+        }
+
+        /* 合作模式 */
+        .model {
+            padding: 100px 20px;
+            background: #fff;
+        }
+
+        .model-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+
+        .step h4 {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 40px;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .step:last-child .step-connector {
+            display: none;
+        }
+
+        /* 合作伙伴 */
+        .partners-logo {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+
+        .logo-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .logo-item {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-light);
+            padding: 20px 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* 底部 */
+        footer {
+            background: var(--primary);
+            color: rgba(255,255,255,0.6);
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--gold);
+        }
+
+        .footer p {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero-stats {
+                gap: 30px;
+            }
+            
+            .stat-number {
+                font-size: 36px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .badge-container {
+                gap: 20px;
+            }
+            
+            .partner-showcase,
+            .case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+        }
+
+        /* 动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* 直播场景图片展示 */
+        .live场景 {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .live场景 span {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">万川<span>远景</span></div>
+            <div class="nav-links">
+                <a href="#about">关于我们</a>
+                <a href="#partners">合作院校</a>
+                <a href="#cases">成功案例</a>
+                <a href="#model">合作模式</a>
+                <a href="#contact">联系我们</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🎯 产教融合标杆企业</div>
+            <h1>万川远景 × 山东文化产业职业学院</h1>
+            <p class="hero-subtitle">深耕直播电商产教融合，培养高素质技能型人才，赋能区域经济发展</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1000万+</span>
+                    <span class="stat-label">注册资本</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2000+</span>
+                    <span class="stat-label">培养学员</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1亿+</span>
+                    <span class="stat-label">直播GMV</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">合作企业</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 资质荣誉 -->
+    <section class="badge-section">
+        <div class="badge-container">
+            <div class="badge">
+                <div class="badge-icon">🌟</div>
+                <h4>行业领先企业</h4>
+                <p>深耕直播电商<br>多年行业经验</p>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">🤝</div>
+                <h4>全国产教融合共同体</h4>
+                <p>全媒体直播行业<br>副理事长单位</p>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">🎓</div>
+                <h4>校企合作示范</h4>
+                <p>山东省产教融合<br>试点项目</p>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">📡</div>
+                <h4>直播基地认证</h4>
+                <p>青岛市直播电商<br>示范基地</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">About Us</span>
+                <h2 class="section-title">关于万川远景</h2>
+                <p class="section-desc">深耕直播电商领域，赋能产教融合新生态</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="icon">📺</div>
+                    <h3>直播电商</h3>
+                    <p>专注于直播带货、短视频运营、主播培训等全链路服务，拥有成熟的直播电商运营体系和丰富的行业资源。</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">🎓</div>
+                    <h3>产教融合</h3>
+                    <p>与全国100+院校建立深度合作，共同培养直播电商专业人才，实现教育链、人才链与产业链、创新链有机衔接。</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">🌐</div>
+                    <h3>产业布局</h3>
+                    <p>业务覆盖山东、浙江、江苏等多个省份，深度参与区域数字经济发展，助力"好品山东"走向全国。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作院校 -->
+    <section class="partners" id="partners">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Partners</span>
+                <h2 class="section-title">战略合作伙伴</h2>
+                <p class="section-desc">强强联手，共建直播电商人才培养高地</p>
+            </div>
+            <div class="partner-showcase">
+                <!-- 山东文化产业职业学院 -->
+                <div class="partner-card">
+                    <div class="partner-header sdcy">
+                        <div class="partner-icon">🎓</div>
+                        <span class="partner-badge">重点合作院校</span>
+                    </div>
+                    <div class="partner-body">
+                        <h3>山东文化产业职业学院</h3>
+                        <p class="subtitle">山东省青岛市莱西市</p>
+                        <p>2009年经山东省人民政府批准、国家教育部备案，由大众报业集团创办的全日制普通高等学校。山东省第一所专门为文化产业培养高素质技能型人才的高职院校。</p>
+                        <div class="partner-stats">
+                            <div class="partner-stat">
+                                <strong>2009</strong>
+                                <span>建校年份</span>
+                            </div>
+                            <div class="partner-stat">
+                                <strong>15000+</strong>
+                                <span>在校生</span>
+                            </div>
+                            <div class="partner-stat">
+                                <strong>10+</strong>
+                                <span>二级学院</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 莱西市 -->
+                <div class="partner-card">
+                    <div class="partner-header laixi">
+                        <div class="partner-icon">🏙️</div>
+                        <span class="partner-badge">政府战略合作</span>
+                    </div>
+                    <div class="partner-body">
+                        <h3>莱西市</h3>
+                        <p class="subtitle">山东省青岛市</p>
+                        <p>青岛北部副中心，山东省县域经济高质量发展试点市。依托山东文化产业职业学院落户优势，大力发展数字经济、直播电商等新兴产业，打造产教融合示范高地。</p>
+                        <div class="partner-stats">
+                            <div class="partner-stat">
+                                <strong>2024</strong>
+                                <span>GDP增速</span>
+                            </div>
+                            <div class="partner-stat">
+                                <strong>5.8%</strong>
+                                <span>增速位居<br>青岛前列</span>
+                            </div>
+                            <div class="partner-stat">
+                                <strong>100亿+</strong>
+                                <span>新兴产业<br>产值</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成功案例 -->
+    <section class="cases" id="cases">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Success Cases</span>
+                <h2 class="section-title">产教融合经典案例</h2>
+                <p class="section-desc">真实数据见证，产教融合结硕果</p>
+            </div>
+            <div class="case-grid">
+                <!-- 案例1 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span class="case-image-placeholder">🎬</span>
+                        <span class="case-tag">校企共建</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>直播电商产业学院</h3>
+                        <p>与山东文化产业职业学院共建直播电商产业学院，开设新媒体运营、直播带货、短视频制作等专业方向，实现课程体系与岗位需求无缝对接。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>500+</strong>
+                                <span>联合培养学员</span>
+                            </div>
+                            <div class="metric">
+                                <strong>98%</strong>
+                                <span>对口就业率</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例2 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <span class="case-image-placeholder">📱</span>
+                        <span class="case-tag">实训项目</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>"校中厂"直播实训基地</h3>
+                        <p>在校内建设真实直播间，引入企业真实项目，让学生在校期间即可参与企业实际运营。完成海尔智家、青岛啤酒等品牌直播带货实训。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>1000万+</strong>
+                                <span>实训GMV</span>
+                            </div>
+                            <div class="metric">
+                                <strong>50+</strong>
+                                <span>实战项目</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例3 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span class="case-image-placeholder">🏆</span>
+                        <span class="case-tag">技能大赛</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>直播电商技能大赛</h3>
+                        <p>联合举办山东省直播电商技能大赛，以赛促学、以赛促训。指导学生参加"海诺杯"直播电商大赛并获奖，提升学生专业技能水平。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>20+</strong>
+                                <span>获奖学生</span>
+                            </div>
+                            <div class="metric">
+                                <strong>5</strong>
+                                <span>省级奖项</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例4 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <span class="case-image-placeholder">📦</span>
+                        <span class="case-tag">品牌带货</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>山东好品直播节</h3>
+                        <p>参与组织"山东好品直播节"等活动，助力莱西市、青岛市特色农产品上行。整合供应链资源，对接京东、淘宝等平台，实现产销对接。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>5000万+</strong>
+                                <span>活动GMV</span>
+                            </div>
+                            <div class="metric">
+                                <strong>100+</strong>
+                                <span>山东品牌</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例5 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <span class="case-image-placeholder">👨‍🏫</span>
+                        <span class="case-tag">师资培训</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>"双师型"教师培养</h3>
+                        <p>企业导师入校开展实践教学，学校教师进企业挂职锻炼。共同开发活页式、工作手册式教材，提升教师实践教学能力。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>30+</strong>
+                                <span>培训教师</span>
+                            </div>
+                            <div class="metric">
+                                <strong>10+</strong>
+                                <span>精品课程</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例6 -->
+                <div class="case-card">
+                    <div class="case-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <span class="case-image-placeholder">🚀</span>
+                        <span class="case-tag">创业孵化</span>
+                    </div>
+                    <div class="case-body">
+                        <h3>大学生直播创业孵化</h3>
+                        <p>为有创业意愿的学生提供场地、设备、供应链等支持。孵化学生直播创业团队，实现"毕业即创业"的零距离衔接。</p>
+                        <div class="case-metrics">
+                            <div class="metric">
+                                <strong>20+</strong>
+                                <span>创业团队</span>
+                            </div>
+                            <div class="metric">
+                                <strong>500万+</strong>
+                                <span>年销售额</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据展示 -->
+    <section class="metrics-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: #fff;">产教融合成果数据</h2>
+                <p class="section-desc" style="color: rgba(255,255,255,0.7);">用数字说话，见证每一步成长</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <span class="number">2000+</span>
+                    <span class="label">培养学员</span>
+                    <span class="desc">累计培养直播电商人才</span>
+                </div>
+                <div class="metric-box">
+                    <span class="number">1.2亿</span>
+                    <span class="label">直播GMV</span>
+                    <span class="desc">实训期间总销售额</span>
+                </div>
+                <div class="metric-box">
+                    <span class="number">98%</span>
+                    <span class="label">就业率</span>
+                    <span class="desc">学员对口就业率</span>
+                </div>
+                <div class="metric-box">
+                    <span class="number">100+</span>
+                    <span class="label">合作企业</span>
+                    <span class="desc">品牌方与供应链伙伴</span>
+                </div>
+                <div class="metric-box">
+                    <span class="number">50+</span>
+                    <span class="label">实战项目</span>
+                    <span class="desc">企业真实项目实训</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作模式 -->
+    <section class="model" id="model">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Cooperation Model</span>
+                <h2 class="section-title">合作模式</h2>
+                <p class="section-desc">多元化的校企合作路径，总有一款适合您</p>
+            </div>
+            <div class="model-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>专业共建</h4>
+                    <p>校企共同制定人才培养方案，开发课程体系，实现专业与产业对接</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>基地共建</h4>
+                    <p>建设"校中厂"实训基地，引入企业真实项目，让学生真刀真枪实训</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>师资共享</h4>
+                    <p>企业导师进课堂，学校教师进企业，双向培养"双师型"人才</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>就业对接</h4>
+                    <p>企业优先录用优秀毕业生，实现招生即招工、入校即入企</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作伙伴 -->
+    <section class="partners-logo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Ecosystem</span>
+                <h2 class="section-title">生态伙伴</h2>
+            </div>
+            <div class="logo-grid">
+                <div class="logo-item">海尔智家</div>
+                <div class="logo-item">青岛啤酒</div>
+                <div class="logo-item">京东物流</div>
+                <div class="logo-item">淘宝直播</div>
+                <div class="logo-item">抖音电商</div>
+                <div class="logo-item">快手电商</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-logo">万川<span>远景</span></div>
+            <p>浙江万川远景文化产业有限公司</p>
+            <p>直播电商产教融合先行者</p>
+            <p style="margin-top: 20px; color: rgba(255,255,255,0.4);">杭州市滨江区 · 山东省青岛市莱西市</p>
+            <div class="footer-bottom">
+                <p>&copy; 2024 浙江万川远景文化产业有限公司 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 导航滚动效果
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.padding = '10px 0';
+                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                nav.style.padding = '15px 0';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // 数字动画
+        const animateNumbers = () => {
+            const numbers = document.querySelectorAll('.stat-number, .number');
+            numbers.forEach(num => {
+                const target = num.textContent;
+                if (target.includes('+') || target.includes('亿') || target.includes('万')) {
+                    num.style.opacity = '1';
+                }
+            });
+        };
+
+        // 滚动显示动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.about-card, .partner-card, .case-card, .metric-box, .step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            animateNumbers();
+        });
+    </script>
+</body>
+</html>
